@@ -1,0 +1,4 @@
+altitude,altitude_color,battery,current_stage,geofence_compliant,geofence_compliant_color,latitude,longitude,pitch,pitch_color,propulsion,propulsion_color,roll,roll_color,sensors_ok,speed,stage_completed,status,yaw,time_since_last_packet,last_packet_time,time,stage_name,mode,hiker_position_lat,hiker_position_lng,err_msg
+100.0,Green,23.0,1,0,Yellow,33.9344055,-117.6306099,87.0,Red,1,Green,20.0,None,1,49.0,1,5,12.0,78,100,2022-01-01 00:00:00,Takeoff to Minimum Altitude,Manual,,,
+0.0,None,0.0,0,0,None,0.0,0.0,0.0,None,0,None,0.0,None,0,0.0,0,0,0.0,0,0,2022-01-01 00:00:00,None,Manual,2.0,7.0,None
+100.0,Green,23.0,1,0,Yellow,33.9344055,-117.6306099,87.0,Red,1,Green,20.0,None,1,49.0,1,5,12.0,78,100,2022-01-01 00:00:00,Takeoff to Minimum Altitude,Manual,33.93364332758927,-117.62873233754273,Overheat

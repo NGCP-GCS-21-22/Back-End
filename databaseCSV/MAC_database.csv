@@ -1,0 +1,16 @@
+altitude,altitude_color,battery,current_stage,geofence_compliant,geofence_compliant_color,latitude,longitude,pitch,pitch_color,propulsion,propulsion_color,roll,roll_color,sensors_ok,speed,stage_completed,status,yaw,time_since_last_packet,last_packet_time,time,stage_name,mode,hiker_position_lat,hiker_position_lng,err_msg
+20.0,Red,80.0,3,0,Yellow,33.933729,-117.6318437,57.0,Red,1,Green,25.0,Red,1,98.0,0,3,45.0,2,2,2022-01-01 00:00:00,ERU Drop,Autonomous,,,
+1.5,Red,0.9,3,1,Green,0.0,2.0005,0.0,None,1,Green,0.0,None,1,0.0,0,1,0.0,78,100,2022-01-01 00:00:00,ERU Drop,Manual,,,
+1.5,Red,0.9,3,1,Green,0.0,2.0005,0.0,None,1,Green,0.0,None,1,0.0,0,1,0.0,78,100,2022-01-01 00:00:00,ERU Drop,Manual,,,
+20.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,50.0,0,4,270.0,50,98,16:06:19,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:40:30,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:40:30,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:40:30,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:40:30,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
+50.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
+0.0,None,0.0,0,0,None,0.0,0.0,0.0,None,0,None,0.0,None,0,0.0,0,0,0.0,0,0,2022-01-01 00:00:00,None,Manual,2.0,7.0,None
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,33.93364332758927,-117.62873233754273,Overheat

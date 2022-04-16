@@ -1,0 +1,4 @@
+altitude,current_stage,time,stage_name
+50.0,0,2022-01-22 00:00:00,Ready to Start
+87.25,0,2022-01-22 11:05:26.881521,Ready to Start
+54.98,1,2022-01-21 07:15:00,Takeoff to Minimum Altitude
