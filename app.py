@@ -11,7 +11,7 @@ from tinydb import TinyDB, Query
 import json
 
 # Comment out for testing for frontend 
-# import sampleGCS
+import sampleGCS
 
 import xbee
 import os
@@ -20,7 +20,7 @@ app = Flask(__name__)
 cors = CORS(app)
 
 # Comment out for testing for frontend 
-# sampleGCS.getPacket.start_receiving()
+sampleGCS.getPacket.start_receiving()
 
 
 # # Update the database with new entries 
@@ -204,7 +204,7 @@ cors = CORS(app)
 
 def send():
     if (request.method == "POST"):
-        requestData  = request.get_json()
+        requestData = request.get_json()
 
         # OLD ENDPOINT : postData
         if requestData['id'] == "GET Vehicle Data":
@@ -215,7 +215,7 @@ def send():
             # Comment out for testing for frontend 
             ########################################################
             # if send is true
-            # sampleGCS.getPacket.getName(vehicleName)
+            
             # time.sleep(1)
             ########################################################
             # Query the database for the requested vehicle & save into dictionary
@@ -237,7 +237,8 @@ def send():
             #print(requestData)
             # print(requestData['data'])
             updateStage.updateTime(requestData['data'], now)
-
+            dataInfo = requestData['data']
+            sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
             return 'Update Complete'
 
         # OLD ENDPOINT: getGeneralStage
@@ -253,7 +254,7 @@ def send():
                 "name": dataValue['stage_name'],
                 "estop": dataValue['estop']
             }
-
+            
             return dataFormat
 
         # OLD ENDPOINT: createNewMission
@@ -284,7 +285,7 @@ def send():
                 "vehicle_name": vehicleName,
                 "mode": mode
             }
-
+            sampleGCS.getPacket.getName(vehicleName)
             # Write the dictionary to the JSON File
             jsonFile = open("manualOverride.json", "w")
             json.dump(modeFormat, jsonFile)

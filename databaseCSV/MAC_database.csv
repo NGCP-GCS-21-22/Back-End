@@ -14,3 +14,10 @@ altitude,altitude_color,battery,current_stage,geofence_compliant,geofence_compli
 90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,,,
 0.0,None,0.0,0,0,None,0.0,0.0,0.0,None,0,None,0.0,None,0,0.0,0,0,0.0,0,0,2022-01-01 00:00:00,None,Manual,2.0,7.0,None
 90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,14:54:24,ERU Drop,Manual,33.93364332758927,-117.62873233754273,Overheat
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,12:26:14,ERU Drop,Manual,21.4,8.0,None
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,12:34:00,ERU Drop,Manual,21.4,8.0,None
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,12:46:24,ERU Drop,Manual,21.4,8.0,None
+90.0,Yellow,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,20.0,0,4,270.0,50,98,12:46:24,ERU Drop,Manual,21.4,8.0,None
+10.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,120.0,Red,1,50.0,0,4,270.0,50,98,12:57:39,ERU Drop,Manual,21.4,8.0,None
+10.0,Red,90.0,3,1,Green,33.933729,-117.6318437,10.0,Green,1,Green,60.0,Red,1,50.0,0,4,270.0,50,98,13:00:32,ERU Drop,Manual,21.4,8.0,None
+10.0,Red,90.0,3,1,Green,33.933729,-117.6318437,50.0,Red,1,Green,100.0,Red,1,50.0,0,4,270.0,50,98,13:00:32,ERU Drop,Manual,21.4,8.0,None
