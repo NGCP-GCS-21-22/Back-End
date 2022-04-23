@@ -1,1 +1,52 @@
-{"MAC": {}, "ERU": {}, "MEA": {}, "search_area_coordinates": {"1": {"SearchArea": [{"longtitude": 99.12345, "latitude": 88.12345}, {"longtitude": 99.12345, "latitude": 88.12345}, {"longtitude": 99.12345, "latitude": 88.12345}]}}, "drop_coordinates": {"1": {"latitude": 19.12345, "longtitude": 21.12345}}, "evacuation_coordinates": {"1": {"latitude": 46, "longtitude": 52.2}}}
+{
+  "MAC": {},
+  "ERU": {},
+  "MEA": {},
+  "search_area_coordinates": {
+    "1": {
+      "SearchArea": [
+        {
+          "longtitude": 99.12345,
+          "latitude": 88.12345
+        },
+        {
+          "longtitude": 99.12345,
+          "latitude": 88.12345
+        },
+        {
+          "longtitude": 99.12345,
+          "latitude": 88.12345
+        }
+      ]
+    }
+  },
+  "home_coordinates": {
+    "1": {
+      "vehicle": "MAC",
+      "latitude": 50.0111,
+      "longtitude": 55.0222
+    },
+    "2": {
+      "vehicle": "MEA",
+      "latitude": 15.1235,
+      "longtitude": 18.53421
+    },
+    "3": {
+      "vehicle": "ERU",
+      "latitude": 50.0111,
+      "longtitude": 55.0222
+    }
+  },
+  "drop_coordinates": {
+    "1": {
+      "latitude": 20.54321,
+      "longtitude": 21.12345
+    }
+  },
+  "evacuation_coordinates": {
+    "1": {
+      "latitude": 46,
+      "longtitude": 52.2
+    }
+  }
+}

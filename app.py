@@ -303,6 +303,7 @@ MEATable = db.table('MEA')
 dropCoordinatesTable = db.table('drop_coordinates')
 evacuationCoordinatesTable = db.table('evacuation_coordinates')
 searchAreaTable = db.table('search_area_coordinates')
+homeLocationTable = db.table('home_coordinates')
 
 # create an instance of Query class that can help us search the database
 query = Query()
@@ -395,6 +396,37 @@ def get_mission_waypoint(mission_id):
             result = json.dumps(dropCoordinatesTable.all())
         elif(mission_id == 'GET Evacuation Zone'):
             result = json.dumps(evacuationCoordinatesTable.all())
+        else: pass
+        response_object['data'] = result
+    return jsonify(response_object)
+
+@app.route('/postHomeLocation/<vehicle_id>', methods=['POST'])
+def post_home_location(vehicle_id):
+    response_object = {'status': 'success'}
+    if request.method == 'POST':
+        home_coordinates = request.get_json(force=True)
+        if(vehicle_id == 'MAC'):
+            homeLocationTable.upsert(home_coordinates, query.vehicle=='MAC')
+        elif(vehicle_id == 'ERU'):
+            homeLocationTable.upsert(home_coordinates, query.vehicle=='ERU')
+        elif(vehicle_id == 'MEA'):
+            homeLocationTable.upsert(home_coordinates, query.vehicle=='MEA')
+        else: pass
+        response_object['message'] = 'data added!'
+    return jsonify(response_object)
+
+# each vehicle has its own home location
+@app.route('/getHomeLocation/<vehicle_id>', methods=['GET'])
+def get_home_location(vehicle_id):
+    response_object = {'status': 'success'}
+    if request.method == 'GET':
+        result=None
+        if(vehicle_id == 'MAC'):
+            result=homeLocationTable.search(query.vehicle == 'MAC')
+        elif(vehicle_id == 'ERU'):
+            result=homeLocationTable.search(query.vehicle == 'ERU')
+        elif(vehicle_id == 'MEA'):
+            result=homeLocationTable.search(query.vehicle == 'MEA')
         else: pass
         response_object['data'] = result
     return jsonify(response_object)
