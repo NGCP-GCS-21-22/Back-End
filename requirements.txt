@@ -3,8 +3,8 @@
 flask
 flask_cors
 datetime
-sqlite3
+# sqlite3
 pandas
-json
+# json
 digi-xbee
 tinydb==4.6.1
