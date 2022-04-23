@@ -96,106 +96,202 @@ cors = CORS(app)
 #         #return '''The value is: {}'''.format(requestedVehicle)
 
 # Sends back the latest entry from requested vehicle
-@app.route("/postData", methods = ["POST"])
-def postData():
+# @app.route("/postData", methods = ["POST"])
+# def postData():
     
-    if(request.method == "POST"):
-        # JSON Format from frontend
-        requestData = request.get_json()
+#     if(request.method == "POST"):
+#         # JSON Format from frontend
+#         requestData = request.get_json()
 
-        # Initialize the requested vehicle name
-        vehicleName = requestData['vehicle_name']
+#         # Initialize the requested vehicle name
+#         vehicleName = requestData['vehicle_name']
         
-        # Comment out for testing for frontend 
-        ########################################################
-        # if send is true
-        # sampleGCS.getPacket.getName(vehicleName)
-        # time.sleep(1)
-        ########################################################
-        # Query the database for the requested vehicle & save into dictionary
-        requestedVehicle = vehicleDatabase.getData(vehicleName)
+#         # Comment out for testing for frontend 
+#         ########################################################
+#         # if send is true
+#         # sampleGCS.getPacket.getName(vehicleName)
+#         # time.sleep(1)
+#         ########################################################
+#         # Query the database for the requested vehicle & save into dictionary
+#         requestedVehicle = vehicleDatabase.getData(vehicleName)
 
-        # print(requestedVehicle)
+#         # print(requestedVehicle)
 
-        # Send JSON Object back to frontend
-        return jsonify(requestedVehicle)
+#         # Send JSON Object back to frontend
+#         return jsonify(requestedVehicle)
 
 # Compares new request's stage/time to updateStage.json
-@app.route("/updateGeneralStage", methods = ['POST'])
-def updateGeneralStage():
-    if(request.method == "POST"):
+# @app.route("/updateGeneralStage", methods = ['POST'])
+# def updateGeneralStage():
+#     if(request.method == "POST"):
 
-        now = datetime.now()
-        # Object from frontened
-        requestData = request.get_json()
-        #sampleGCS.getPacket.getName(postData.vehicleName)
-        #print(now)
-        #print(requestData)
-        updateStage.updateTime(requestData, now)
 
-    return 'Update Complete'
+#         now = datetime.now()
+#         # Object from frontened
+#         requestData = request.get_json()
+
+#         #sampleGCS.getPacket.getName(postData.vehicleName)
+#         #print(now)
+#         #print(requestData)
+#         updateStage.updateTime(requestData, now)
+
+#     return 'Update Complete'
 
 # Sends information from updateStage.json
-@app.route("/getGeneralStage", methods = ['GET'])
-def getGeneralStage():
+# @app.route("/getGeneralStage", methods = ['GET'])
+# def getGeneralStage():
 
-    # opens updateStage.json
-    jsonFile = open("updateStage.json")
-    dataValue = json.load(jsonFile)
+#     # opens updateStage.json
+#     jsonFile = open("updateStage.json")
+#     dataValue = json.load(jsonFile)
 
-    # Saves the information needed to display general stage
-    dataFormat = {
-        "id": dataValue['general_stage'],
-        "vehicle": dataValue['vehicle'],
-        "name": dataValue['stage_name'],
-        "estop": dataValue['estop']
-    }
+#     # Saves the information needed to display general stage
+#     dataFormat = {
+#         "id": dataValue['general_stage'],
+#         "vehicle": dataValue['vehicle'],
+#         "name": dataValue['stage_name'],
+#         "estop": dataValue['estop']
+#     }
 
-    return dataFormat
+#     return dataFormat
 
 # Saves the new mission entry into newMission.json
-@app.route("/createNewMission", methods = ['POST'])
-def createNewMission():
-    if(request.method == "POST"):
+# @app.route("/createNewMission", methods = ['POST'])
+# def createNewMission():
+#     if(request.method == "POST"):
 
-        # Object from frontend
-        requestData = request.get_json()
+#         # Object from frontend
+#         requestData = request.get_json()
 
-        # Sends the new mission to be saved
-        Mission.createMission(requestData)
+#         # Sends the new mission to be saved
+#         Mission.createMission(requestData)
 
-    return 'Created New Mission'
+#     return 'Created New Mission'
 
 # Sends back the saved mission from newMission.json
-@app.route("/getNewMission", methods = ['GET'])
-def getnewMission():
-    if(request.method == "GET"):
-        # Opens the saved mission entry from the JSON File and saves it into a variable 
+# @app.route("/getNewMission", methods = ['GET'])
+# def getnewMission():
+#     if(request.method == "GET"):
+#         # Opens the saved mission entry from the JSON File and saves it into a variable 
 
         
-        jsonFile = open("newMission.json")
-        dataValue = json.load(jsonFile)
+#         jsonFile = open("newMission.json")
+#         dataValue = json.load(jsonFile)
 
-    return dataValue
+#     return dataValue
 
-@app.route("/manualOverride", methods = ['POST'])
-def manualOverride():
-    if(request.method == "POST"):
+# @app.route("/manualOverride", methods = ['POST'])
+# def manualOverride():
+#     if(request.method == "POST"):
 
-        requestData = request.get_json()
-        vehicleName = requestData['vehicle_name']
-        mode = requestData['mode']
+#         requestData = request.get_json()
+#         vehicleName = requestData['vehicle_name']
+#         mode = requestData['mode']
 
-        modeFormat = {
-            "vehicle_name": vehicleName,
-            "mode": mode
-        }
+#         modeFormat = {
+#             "vehicle_name": vehicleName,
+#             "mode": mode
+#         }
 
-        # Write the dictionary to the JSON File
-        jsonFile = open("manualOverride.json", "w")
-        json.dump(modeFormat, jsonFile)
-        jsonFile.close()
-    return modeFormat
+#         # Write the dictionary to the JSON File
+#         jsonFile = open("manualOverride.json", "w")
+#         json.dump(modeFormat, jsonFile)
+#         jsonFile.close()
+#     return modeFormat
+
+
+@app.route("/send", methods = ["POST", "GET"])
+
+def send():
+    if (request.method == "POST"):
+        requestData  = request.get_json()
+
+        # OLD ENDPOINT : postData
+        if requestData['id'] == "GET Vehicle Data":
+            
+            # Initialize the requested vehicle name
+            dataInfo = requestData['data']
+            vehicleName = dataInfo['vehicle_name']
+            # Comment out for testing for frontend 
+            ########################################################
+            # if send is true
+            # sampleGCS.getPacket.getName(vehicleName)
+            # time.sleep(1)
+            ########################################################
+            # Query the database for the requested vehicle & save into dictionary
+            requestedVehicle = vehicleDatabase.getData(vehicleName)
+
+            # print(requestedVehicle)
+
+            # Send JSON Object back to frontend
+            return jsonify(requestedVehicle)
+        
+        # OLD ENDPOINT: updateGeneralStage
+        elif requestData['id'] == "Stage Selection":
+            now = datetime.now()
+            # Object from frontened
+            # requestData = request.get_json()
+
+            #sampleGCS.getPacket.getName(postData.vehicleName)
+            #print(now)
+            #print(requestData)
+            # print(requestData['data'])
+            updateStage.updateTime(requestData['data'], now)
+
+            return 'Update Complete'
+
+        # OLD ENDPOINT: getGeneralStage
+        elif requestData['id'] == "GET General Stage":
+            # opens updateStage.json
+            jsonFile = open("updateStage.json")
+            dataValue = json.load(jsonFile)
+
+            # Saves the information needed to display general stage
+            dataFormat = {
+                "id": dataValue['general_stage'],
+                "vehicle": dataValue['vehicle'],
+                "name": dataValue['stage_name'],
+                "estop": dataValue['estop']
+            }
+
+            return dataFormat
+
+        # OLD ENDPOINT: createNewMission
+        elif requestData['id'] == 'Create New Mission':
+            # Object from frontend
+            requestData = request.get_json()
+
+            # Sends the new mission to be saved
+            Mission.createMission(requestData['data'])
+
+            return 'Created New Mission'
+
+        # OLD ENDPOINT: getNewMission
+        elif requestData['id'] == 'GET Primary Mission':
+            jsonFile = open("newMission.json")
+            dataValue = json.load(jsonFile)
+
+            return dataValue
+        
+        # OLD ENDPOINT: manualOverride
+        elif requestData['id'] == 'Manual Control Override':
+            requestData = request.get_json()
+            dataInfo = requestData['data']
+            vehicleName = dataInfo['vehicle_name']
+            mode = dataInfo['mode']
+
+            modeFormat = {
+                "vehicle_name": vehicleName,
+                "mode": mode
+            }
+
+            # Write the dictionary to the JSON File
+            jsonFile = open("manualOverride.json", "w")
+            json.dump(modeFormat, jsonFile)
+            jsonFile.close()
+            
+            return modeFormat
+
 
 # create db.json file for storing geofence data
 db = TinyDB('geoDB.json')
@@ -216,6 +312,7 @@ query = Query()
 # def debug():
 #     # print(db.all())
 #     return json.dumps(MACTable.all())
+# mea and eru share the same drop location and evacuation zone 
 
 '''
 SUBMIT ALL: clear all data and add new submitted data
