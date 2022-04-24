@@ -127,10 +127,10 @@ class getPacket():
         stop = False
         cmd = ""
         sent = False
-        if (vehicleName == "MAC"):
-            cmd = "m"
-        #if (vehicleName == "ERU"):
-        #    cmd = "e"
+        #if (vehicleName == "MAC"):
+        #    cmd = "m"
+        if (vehicleName == "ERU"):
+            cmd = "e"
         try:
             # while True:
             if cmd is "+":

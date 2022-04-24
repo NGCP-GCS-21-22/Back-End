@@ -6,7 +6,7 @@ from unicodedata import decimal
 from digi.xbee.devices import DigiMeshDevice
 from enum import Enum
 from threading import Lock, Thread
-from math import floor
+from math import ceil, floor
 
 # '''
 # Python docs:
@@ -53,7 +53,7 @@ class Packet:
 
     def transmit(self, device, recipient):
         packet_size = int.from_bytes(device.get_parameter('NP'), byteorder='big')-5
-        count = floor(len(self.data)/float(packet_size))
+        count = ceil(len(self.data)/float(packet_size))
         print("Sending ", count," packets of ", packet_size, " length")
         self.data = struct.pack('I', int(count)) + self.data
 
@@ -149,8 +149,8 @@ class ToMAC:
 
     @classmethod
     def deserialize(cls, data: bytearray):
-        header = data[:37]
-        body = data[37:]
+        header = data[:65]
+        body = data[65:]
         raw = [*struct.unpack("?B2d2I4d?", header)]
         raw.insert(2, LatLng(raw.pop(2), raw.pop(2)))
         raw.insert(5, LatLng(raw.pop(5), raw.pop(5)))
@@ -165,8 +165,8 @@ class ToMAC:
             coords = []
             body = body[2:]
             for j in range(coord_length):
-                coords += [LatLng(*struct.unpack("2d", body[:8]))]
-                body = body[8:]
+                coords += [LatLng(*struct.unpack("2d", body[:16]))]
+                body = body[16:]
 
             geofence += [Geofence(keep, coords)]
         
@@ -176,8 +176,8 @@ class ToMAC:
             coords = []
             body = body[1:]
             for j in range(coord_length):
-                coords += [LatLng(*struct.unpack("2d", body[:8]))]
-                body = body[8:]
+                coords += [LatLng(*struct.unpack("2d", body[:16]))]
+                body = body[16:]
 
             search_area += [SearchArea(coords)]
 
@@ -234,8 +234,8 @@ class ToERU:
 
     @classmethod
     def deserialize(cls, data: bytearray):
-        header = data[:35]
-        body = data[35:]
+        header = data[:67]
+        body = data[67:]
         raw = [*struct.unpack("?B2dI4d3?", header)]
         raw.insert(2, LatLng(raw.pop(2), raw.pop(2)))
         raw.insert(4, LatLng(raw.pop(4), raw.pop(4)))
@@ -250,8 +250,8 @@ class ToERU:
             coords = []
             body = body[2:]
             for j in range(coord_length):
-                coords += [LatLng(*struct.unpack("2d", body[:8]))]
-                body = body[8:]
+                coords += [LatLng(*struct.unpack("2d", body[:16]))]
+                body = body[16:]
             geofence += [Geofence(keep, coords)]
 
         control_data = None
@@ -318,8 +318,8 @@ class ToMEA:
             coords = []
             body = body[2:]
             for j in range(coord_length):
-                coords += [LatLng(*struct.unpack("2d", body[:8]))]
-                body = body[8:]
+                coords += [LatLng(*struct.unpack("2d", body[:16]))]
+                body = body[16:]
 
             geofence += [Geofence(keep, coords)]
 
@@ -340,10 +340,10 @@ class ToMEA:
 
 ## Defines custom data structures needed
 class LatLng():
-    lat: float
-    lng: float
+    lat: decimal
+    lng: decimal
 
-    def __init__(self, lat: float=0, lng: float=0):
+    def __init__(self, lat: decimal=0, lng: decimal=0):
         self.lat = lat
         self.lng = lng
 
@@ -394,11 +394,11 @@ class SearchArea():
         return '{' + str(self.__dict__)[1:-1] + '}'
 
 class Orientation():
-    pitch: float
-    roll: float
-    yaw: float
+    pitch: decimal
+    roll: decimal
+    yaw: decimal
 
-    def __init__(self, pitch: float, roll: float, yaw: float):
+    def __init__(self, pitch: decimal, roll: decimal, yaw: decimal):
         self.pitch = pitch
         self.roll = roll
         self.yaw = yaw
@@ -407,11 +407,11 @@ class Orientation():
         return f"{{Pitch: {self.pitch}*, Roll: {self.roll}*, Yaw: {self.yaw}*}}"
 
 class ManualControl():
-    vertical: float
-    horizontal: float
-    arm: float
-    claw: float
-    speed: float
+    vertical: decimal
+    horizontal: decimal
+    arm: decimal
+    claw: decimal
+    speed: decimal
 
     def __init__(self, vertical, horizontal, arm, claw, speed):
         self.vertical = vertical
