@@ -361,11 +361,11 @@ def post_drop_location():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         drop_coordinates = request.get_json(force=True)
-        temp=list(drop_coordinates.values())
-        for x in temp:
-            if(type(x) != float):
-                response_object['status': 'Fail-wrong input format']
-                return jsonify(response_object)
+        # temp=list(drop_coordinates.values())
+        # for x in temp:
+        #     if(type(x) != float):
+        #         response_object['status': 'Fail-wrong input format']
+        #         return jsonify(response_object)
         dropCoordinatesTable.truncate()
         dropCoordinatesTable.insert(drop_coordinates)
         response_object['message'] = 'data added!'
@@ -376,11 +376,11 @@ def post_evacuation_zone():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         evac_coordinates = request.get_json(force=True)
-        temp=list(evac_coordinates.values())
-        for x in temp:
-            if(type(x) != float):
-                response_object['status': 'Fail-wrong input format']
-                return jsonify(response_object)
+        # temp=list(evac_coordinates.values())
+        # for x in temp:
+        #     if(type(x) != float):
+        #         response_object['status': 'Fail-wrong input format']
+        #         return jsonify(response_object)
         evacuationCoordinatesTable.truncate()
         evacuationCoordinatesTable.insert(evac_coordinates)
         response_object['message'] = 'data added!'
