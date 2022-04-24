@@ -393,44 +393,45 @@ def get_mission_waypoint(vehicle_name):
     if request.method == 'GET':
         result=None
         if(vehicle_name == 'MAC'):
-            result = json.dumps(dropCoordinatesTable.all())
+            # result = json.dumps(dropCoordinatesTable.all())
+            result = dropCoordinatesTable.all()
         elif(vehicle_name == 'MEA' or vehicle_name == 'ERU'):
-            result = json.dumps(evacuationCoordinatesTable.all())
+            # result = json.dumps(evacuationCoordinatesTable.all())
+            result = evacuationCoordinatesTable.all()
         else: pass
-        response_object['data'] = result
+        response_object['data'] = result[0]
     return jsonify(response_object)
 
-@app.route('/postHomeCoordinates/<vehicle_id>', methods=['POST'])
-def post_home_location(vehicle_id):
+@app.route('/postHomeCoordinates/<vehicle_name>', methods=['POST'])
+def post_home_location(vehicle_name):
     response_object = {'status': 'success'}
     if request.method == 'POST':
         home_coordinates = request.get_json(force=True)
-        if(vehicle_id == 'MAC'):
+        if(vehicle_name == 'MAC'):
             homeLocationTable.upsert(home_coordinates, query.vehicle=='MAC')
-        elif(vehicle_id == 'ERU'):
+        elif(vehicle_name == 'ERU'):
             homeLocationTable.upsert(home_coordinates, query.vehicle=='ERU')
-        elif(vehicle_id == 'MEA'):
+        elif(vehicle_name == 'MEA'):
             homeLocationTable.upsert(home_coordinates, query.vehicle=='MEA')
         else: pass
         response_object['message'] = 'data added!'
     return jsonify(response_object)
 
 # each vehicle has its own home location
-@app.route('/getHomeCoordinates/<vehicle_id>', methods=['GET'])
-def get_home_location(vehicle_id):
+@app.route('/getHomeCoordinates/<vehicle_name>', methods=['GET'])
+def get_home_location(vehicle_name):
     response_object = {'status': 'success'}
     if request.method == 'GET':
         result=None
-        if(vehicle_id == 'MAC'):
-            result=homeLocationTable.search(query['vehicle'] == 'MAC')
-        elif(vehicle_id == 'ERU'):
-            result=homeLocationTable.search(query['vehicle'] == 'ERU')
-        elif(vehicle_id == 'MEA'):
-            result = homeLocationTable.get(query.vehicle == 'MEA')
-            # result=homeLocationTable.search(query['vehicle'] == 'MEA')
+        if(vehicle_name == 'MAC'):
+            result=homeLocationTable.search(query.vehicle == 'MAC')
+        elif(vehicle_name == 'ERU'):
+            result=homeLocationTable.search(query.vehicle == 'ERU')
+        elif(vehicle_name == 'MEA'):
+            result=homeLocationTable.search(query.vehicle == 'MEA')
         else: pass
-        response_object['data'] = result
-    return type(result)
+        response_object['data'] = result[0]
+    return jsonify(response_object)
 
 @app.route('/postSearchArea', methods=['POST'])
 def post_search_area():
