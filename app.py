@@ -393,15 +393,14 @@ def get_mission_waypoint(vehicle_name):
     if request.method == 'GET':
         result=None
         if(vehicle_name == 'MAC'):
-            # result = json.dumps(dropCoordinatesTable.all())
             result = dropCoordinatesTable.all()
         elif(vehicle_name == 'MEA' or vehicle_name == 'ERU'):
-            # result = json.dumps(evacuationCoordinatesTable.all())
             result = evacuationCoordinatesTable.all()
         else: pass
         response_object['data'] = result[0]
     return jsonify(response_object)
 
+# each vechicle has its own home location
 @app.route('/postHomeCoordinates/<vehicle_name>', methods=['POST'])
 def post_home_location(vehicle_name):
     response_object = {'status': 'success'}
