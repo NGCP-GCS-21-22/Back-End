@@ -446,8 +446,8 @@ def post_search_area():
 def get_search_area():
     result=None
     if request.method == 'GET':
-        result = json.dumps(searchAreaTable.all())
-    return jsonify(result)
+        result = searchAreaTable.all()
+    return jsonify(result[0]["SearchArea"])
 
 ####### commands that modify database without requests
 # db.drop_table('_default')
