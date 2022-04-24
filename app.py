@@ -319,30 +319,33 @@ query = Query()
 SUBMIT ALL: clear all data and add new submitted data
 DELETE ALL: clear all data and leave it be
 '''
-@app.route('/gcs/geofence/<vehicle_id>', methods=['GET', 'POST'])
-def submit_geofence(vehicle_id):
+@app.route('/postGeofence/<vehicle_name>', methods=['POST'])
+def submit_geofence(vehicle_name):
     response_object = {'status': 'success'}
     if request.method == 'POST':
         geoData = request.get_json(force=True)
-        if vehicle_id == 'MAC':
+        if vehicle_name == 'MAC':
             MACTable.truncate()
             MACTable.insert(geoData)
-        elif vehicle_id == 'ERU':
+        elif vehicle_name == 'ERU':
             ERUTable.truncate()
             ERUTable.insert(geoData)
-        elif vehicle_id == 'MEA':
+        elif vehicle_name == 'MEA':
             MEATable.truncate()
             MEATable.insert(geoData)
         response_object['message'] = 'data added!'
-    else:
-        if vehicle_id == 'MAC':
-            result = json.dumps(MACTable.all())
-        elif vehicle_id == 'ERU':
-            result = json.dumps(ERUTable.all())
-        elif vehicle_id == 'MEA':
-            result = json.dumps(MEATable.all())
-        response_object['data'] = result
     return jsonify(response_object)
+
+@app.route('/getGeofence/<vehicle_name>', methods=['GET'])
+def get_geofence(vehicle_name):
+    result=None
+    if vehicle_name == 'MAC':
+        result = json.dumps(MACTable.all())
+    elif vehicle_name == 'ERU':
+        result = json.dumps(ERUTable.all())
+    elif vehicle_name == 'MEA':
+        result = json.dumps(MEATable.all())
+    return jsonify(result[0])
 
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
@@ -361,11 +364,11 @@ def post_drop_location():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         drop_coordinates = request.get_json(force=True)
-        # temp=list(drop_coordinates.values())
-        # for x in temp:
-        #     if(type(x) != float):
-        #         response_object['status': 'Fail-wrong input format']
-        #         return jsonify(response_object)
+        temp=list(drop_coordinates.values())
+        for x in temp:
+            if(type(x) != float):
+                response_object['status'] = 'Fail-wrong input format'
+                return jsonify(response_object)
         dropCoordinatesTable.truncate()
         dropCoordinatesTable.insert(drop_coordinates)
         response_object['message'] = 'data added!'
@@ -376,11 +379,11 @@ def post_evacuation_zone():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         evac_coordinates = request.get_json(force=True)
-        # temp=list(evac_coordinates.values())
-        # for x in temp:
-        #     if(type(x) != float):
-        #         response_object['status': 'Fail-wrong input format']
-        #         return jsonify(response_object)
+        temp=list(evac_coordinates.values())
+        for x in temp:
+            if(type(x) != float):
+                response_object['status'] = 'Fail-wrong input format'
+                return jsonify(response_object)
         evacuationCoordinatesTable.truncate()
         evacuationCoordinatesTable.insert(evac_coordinates)
         response_object['message'] = 'data added!'
@@ -389,16 +392,14 @@ def post_evacuation_zone():
 # return drop location for MAC and evacuation zone for MEA and ERU
 @app.route('/getMissionWaypoint/<vehicle_name>', methods=['GET'])
 def get_mission_waypoint(vehicle_name):
-    response_object = {'status': 'success'}
+    result=None
     if request.method == 'GET':
-        result=None
         if(vehicle_name == 'MAC'):
             result = dropCoordinatesTable.all()
         elif(vehicle_name == 'MEA' or vehicle_name == 'ERU'):
             result = evacuationCoordinatesTable.all()
         else: pass
-        response_object['data'] = result[0]
-    return jsonify(response_object)
+    return jsonify(result[0])
 
 # each vechicle has its own home location
 @app.route('/postHomeCoordinates/<vehicle_name>', methods=['POST'])
@@ -419,9 +420,8 @@ def post_home_location(vehicle_name):
 # each vehicle has its own home location
 @app.route('/getHomeCoordinates/<vehicle_name>', methods=['GET'])
 def get_home_location(vehicle_name):
-    response_object = {'status': 'success'}
+    result=None
     if request.method == 'GET':
-        result=None
         if(vehicle_name == 'MAC'):
             result=homeLocationTable.search(query.vehicle == 'MAC')
         elif(vehicle_name == 'ERU'):
@@ -429,8 +429,7 @@ def get_home_location(vehicle_name):
         elif(vehicle_name == 'MEA'):
             result=homeLocationTable.search(query.vehicle == 'MEA')
         else: pass
-        response_object['data'] = result[0]
-    return jsonify(response_object)
+    return jsonify(result[0])
 
 @app.route('/postSearchArea', methods=['POST'])
 def post_search_area():
@@ -444,11 +443,10 @@ def post_search_area():
 
 @app.route('/getSearchArea', methods=['GET'])
 def get_search_area():
-    response_object = {'status': 'success'}
+    result=None
     if request.method == 'GET':
         result = json.dumps(searchAreaTable.all())
-        response_object['data'] = result
-    return jsonify(response_object)
+    return jsonify(result)
 
 ####### commands that modify database without requests
 # db.drop_table('_default')
