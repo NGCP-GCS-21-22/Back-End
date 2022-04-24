@@ -371,7 +371,6 @@ def post_drop_location():
         response_object['message'] = 'data added!'
     return jsonify(response_object)
 
-
 @app.route('/postEvacuationZone', methods=['POST'])
 def post_evacuation_zone():
     response_object = {'status': 'success'}
@@ -400,7 +399,7 @@ def get_mission_waypoint(mission_id):
         response_object['data'] = result
     return jsonify(response_object)
 
-@app.route('/postHomeLocation/<vehicle_id>', methods=['POST'])
+@app.route('/postHomeCoordinates/<vehicle_id>', methods=['POST'])
 def post_home_location(vehicle_id):
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -416,7 +415,7 @@ def post_home_location(vehicle_id):
     return jsonify(response_object)
 
 # each vehicle has its own home location
-@app.route('/getHomeLocation/<vehicle_id>', methods=['GET'])
+@app.route('/getHomeCoordinates/<vehicle_id>', methods=['GET'])
 def get_home_location(vehicle_id):
     response_object = {'status': 'success'}
     if request.method == 'GET':
