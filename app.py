@@ -356,7 +356,7 @@ def remove_geofence(vehicle_id):
     else: pass
     return "DELETE SUCCESS"
 
-@app.route('/postDropLocation', methods=['POST'])
+@app.route('/postERUDropLocation', methods=['POST'])
 def post_drop_location():
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -386,14 +386,15 @@ def post_evacuation_zone():
         response_object['message'] = 'data added!'
     return jsonify(response_object)
 
-@app.route('/getMissionWaypoint/<mission_id>', methods=['GET'])
-def get_mission_waypoint(mission_id):
+# return drop location for MAC and evacuation zone for MEA and ERU
+@app.route('/getMissionWaypoint/<vehicle_name>', methods=['GET'])
+def get_mission_waypoint(vehicle_name):
     response_object = {'status': 'success'}
     if request.method == 'GET':
         result=None
-        if(mission_id == 'GET ERU Drop Location'):
+        if(vehicle_name == 'MAC'):
             result = json.dumps(dropCoordinatesTable.all())
-        elif(mission_id == 'GET Evacuation Zone'):
+        elif(vehicle_name == 'MEA' or vehicle_name == 'ERU'):
             result = json.dumps(evacuationCoordinatesTable.all())
         else: pass
         response_object['data'] = result
@@ -421,14 +422,15 @@ def get_home_location(vehicle_id):
     if request.method == 'GET':
         result=None
         if(vehicle_id == 'MAC'):
-            result=homeLocationTable.search(query.vehicle == 'MAC')
+            result=homeLocationTable.search(query['vehicle'] == 'MAC')
         elif(vehicle_id == 'ERU'):
-            result=homeLocationTable.search(query.vehicle == 'ERU')
+            result=homeLocationTable.search(query['vehicle'] == 'ERU')
         elif(vehicle_id == 'MEA'):
-            result=homeLocationTable.search(query.vehicle == 'MEA')
+            result = homeLocationTable.get(query.vehicle == 'MEA')
+            # result=homeLocationTable.search(query['vehicle'] == 'MEA')
         else: pass
         response_object['data'] = result
-    return jsonify(response_object)
+    return type(result)
 
 @app.route('/postSearchArea', methods=['POST'])
 def post_search_area():
@@ -447,8 +449,6 @@ def get_search_area():
         result = json.dumps(searchAreaTable.all())
         response_object['data'] = result
     return jsonify(response_object)
-
-
 
 ####### commands that modify database without requests
 # db.drop_table('_default')

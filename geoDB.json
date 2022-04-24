@@ -6,16 +6,16 @@
     "1": {
       "SearchArea": [
         {
-          "longtitude": 99.12345,
-          "latitude": 88.12345
+          "lng": 99.12345,
+          "lat": 88.12345
         },
         {
-          "longtitude": 99.12345,
-          "latitude": 88.12345
+          "lng": 99.12345,
+          "lat": 88.12345
         },
         {
-          "longtitude": 99.12345,
-          "latitude": 88.12345
+          "lng": 99.12345,
+          "lat": 88.12345
         }
       ]
     }
@@ -23,30 +23,30 @@
   "home_coordinates": {
     "1": {
       "vehicle": "MAC",
-      "latitude": 50.0111,
-      "longtitude": 55.0222
+      "lat": 50.0111,
+      "lng": 55.0222
     },
     "2": {
       "vehicle": "MEA",
-      "latitude": 15.1235,
-      "longtitude": 18.53421
+      "lat": 15.1235,
+      "lng": 18.53421
     },
     "3": {
       "vehicle": "ERU",
-      "latitude": 50.0111,
-      "longtitude": 55.0222
+      "lat": 50.0111,
+      "lng": 55.0222
     }
   },
   "drop_coordinates": {
     "1": {
-      "latitude": 20.54321,
-      "longtitude": 21.12345
+      "lat": 20.54321,
+      "lng": 21.12345
     }
   },
   "evacuation_coordinates": {
     "1": {
-      "latitude": 46,
-      "longtitude": 52.2
+      "lat": 46,
+      "lng": 52.2
     }
   }
 }
