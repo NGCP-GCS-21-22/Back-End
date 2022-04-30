@@ -10,7 +10,7 @@ from urllib import response
 from tinydb import TinyDB, Query
 import json
 
-# Comment out for testing for frontend 
+# Comment out for testing for frontend
 import sampleGCS
 
 import xbee
@@ -19,7 +19,7 @@ import os
 app = Flask(__name__)
 cors = CORS(app)
 
-# Comment out for testing for frontend 
+# Comment out for testing for frontend
 sampleGCS.getPacket.start_receiving()
 
 
@@ -215,7 +215,7 @@ def send():
             # Comment out for testing for frontend 
             ########################################################
             # if send is true
-            
+            sampleGCS.getPacket.getName(vehicleName)
             # time.sleep(1)
             ########################################################
             # Query the database for the requested vehicle & save into dictionary

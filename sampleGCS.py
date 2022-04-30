@@ -52,7 +52,7 @@ class updateDatabase():
         vehicleDatabase.saveData(requestedVehicle, "MAC")
 
 
-comm_port = "COM7" # can be swapped out for "/dev/ttyUSB0" for serial connection
+comm_port = "COM6" # can be swapped out for "/dev/ttyUSB0" for serial connection
 baud_rate = "9600"
 telemetry_data = ""
 
@@ -142,7 +142,8 @@ class getPacket():
             if cmd is "s":
                 stop = not stop
             if cmd is "e":
-                ToERU(stop, state, hiker_pos, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, None, True).serialize().transmit(device, devices['eru'])
+                with xbee.read_lock:
+                    ToERU(stop, state, hiker_pos, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, None, True).serialize().transmit(device, devices['eru'])
             if cmd is "m":
                 #device.del_data_received_callback(getPacket.packet_received)
                 xbee.read_lock.acquire()
