@@ -342,11 +342,17 @@ def get_geofence(vehicle_name):
     result=None
     if vehicle_name == 'MAC':
         result = MACTable.all()
+        if result == None:
+            return {"ERROR: Nothing to be shown"}
     elif vehicle_name == 'ERU':
         result = ERUTable.all()
+        if result == None:
+            return {"ERROR: Nothing to be shown"}
     elif vehicle_name == 'MEA':
         result = MEATable.all()
-    return jsonify(result[0]["geofence"])
+        if result == None:
+            return {"ERROR: Nothing to be shown"}
+    return jsonify(result[0]['geofence'])
 
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
