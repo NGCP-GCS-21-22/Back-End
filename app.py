@@ -341,12 +341,12 @@ def submit_geofence(vehicle_name):
 def get_geofence(vehicle_name):
     result=None
     if vehicle_name == 'MAC':
-        result = json.dumps(MACTable.all())
+        result = MACTable.all()
     elif vehicle_name == 'ERU':
-        result = json.dumps(ERUTable.all())
+        result = ERUTable.all()
     elif vehicle_name == 'MEA':
-        result = json.dumps(MEATable.all())
-    return jsonify(result[0])
+        result = MEATable.all()
+    return jsonify(result[0]["Geofence"])
 
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
@@ -447,7 +447,7 @@ def get_search_area():
     result=None
     if request.method == 'GET':
         result = searchAreaTable.all()
-    return jsonify(result[0]["SearchArea"])
+    return jsonify(result[0]["search_area"])
 
 ####### commands that modify database without requests
 # db.drop_table('_default')
