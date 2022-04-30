@@ -62,6 +62,13 @@ class updateStage():
             jsonFile = open("updateStage.json", "w")
             json.dump(stageFormat, jsonFile)
             jsonFile.close()
+    
+    def updateStageName(currentStage): 
+        stageNames = ["Ready to Start", "Takeoff to Minimum Altitude", "Find the Hiker", "ERU Drop",
+                    "ERU Landing Sequence", "Drive to Hiker", "Load the Hiker", "Go to EZ", "Transferring Hiker",
+                    "Return to Home/Travel to Position"]
+
+        return stageNames[currentStage]
 
     def updateStageName(currentStage): 
         stageNames = ["Ready to Start", "Takeoff to Minimum Altitude", "Find the Hiker", "ERU Drop",
