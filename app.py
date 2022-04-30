@@ -346,7 +346,7 @@ def get_geofence(vehicle_name):
         result = ERUTable.all()
     elif vehicle_name == 'MEA':
         result = MEATable.all()
-    return jsonify(result[0]["Geofence"])
+    return jsonify(result[0]["geofence"])
 
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
