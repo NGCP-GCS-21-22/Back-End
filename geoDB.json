@@ -1,1 +1,99 @@
-{"MAC": {"1": {"geofence": [{"Coordinates": [{"lat": 30, "lng": 25.5}, {"lat": 50.9, "lng": 10.5}, {"lat": 20, "lng": 30}, {"lat": 60, "lng": 52.3}, {"lat": 71, "lng": 40.12}], "Keep_in": true, "Circle_inputs": {"lng": null, "lat": null, "rad": null}}, {"Coordinates": [{"lat": 40, "lng": 35.5}, {"lat": 61.9, "lng": 12.5}, {"lat": 30, "lng": 56}], "Keep_in": false, "Circle_inputs": {"lng": -124, "lat": 37, "rad": null}}]}}, "ERU": {}, "MEA": {}, "search_area_coordinates": {"1": {"search_area": [{"lng": 99.12345, "lat": 88.12345}, {"lng": 99.12345, "lat": 88.12345}, {"lng": 99.12345, "lat": 88.12345}]}}, "home_coordinates": {"1": {"vehicle": "MAC", "lat": 33.93368449228065, "lng": -117.63028265435334}, "2": {"vehicle": "MEA", "lat": 33.934454472545525, "lng": -117.63246060807343}, "3": {"vehicle": "ERU", "lat": 33.93368449228065, "lng": -117.63077618081208}}, "drop_coordinates": {"1": {"lat": 33.93436545784193, "lng": -117.6308888335907}}, "evacuation_coordinates": {"1": {"lat": 33.934071708659815, "lng": -117.63107658822175}}}
+{
+  "MAC": {
+    "1": {
+      "geofence": [
+        {
+          "coordinates": [
+            {
+              "lat": 30,
+              "lng": 25.5
+            },
+            {
+              "lat": 50.9,
+              "lng": 10.5
+            },
+            {
+              "lat": 20,
+              "lng": 30
+            },
+            {
+              "lat": 60,
+              "lng": 52.3
+            },
+            {
+              "lat": 71,
+              "lng": 40.12
+            }
+          ],
+          "keep_in": true
+        },
+        {
+          "coordinates": [
+            {
+              "lat": 40,
+              "lng": 35.5
+            },
+            {
+              "lat": 61.9,
+              "lng": 12.5
+            },
+            {
+              "lat": 30,
+              "lng": 56
+            }
+          ],
+          "keep_in": false
+        }
+      ]
+    }
+  },
+  "ERU": {},
+  "MEA": {},
+  "search_area_coordinates": {
+    "1": {
+      "search_area": [
+        {
+          "lng": 99.12345,
+          "lat": 88.12345
+        },
+        {
+          "lng": 99.12345,
+          "lat": 88.12345
+        },
+        {
+          "lng": 99.12345,
+          "lat": 88.12345
+        }
+      ]
+    }
+  },
+  "home_coordinates": {
+    "1": {
+      "vehicle": "MAC",
+      "lat": 33.93368449228065,
+      "lng": -117.63028265435334
+    },
+    "2": {
+      "vehicle": "MEA",
+      "lat": 33.934454472545525,
+      "lng": -117.63246060807343
+    },
+    "3": {
+      "vehicle": "ERU",
+      "lat": 33.93368449228065,
+      "lng": -117.63077618081208
+    }
+  },
+  "drop_coordinates": {
+    "1": {
+      "lat": 33.93436545784193,
+      "lng": -117.6308888335907
+    }
+  },
+  "evacuation_coordinates": {
+    "1": {
+      "lat": 33.934071708659815,
+      "lng": -117.63107658822175
+    }
+  }
+}
