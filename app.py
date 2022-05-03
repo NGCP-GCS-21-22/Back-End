@@ -8,6 +8,7 @@ from datetime import datetime
 from mission import *
 from urllib import response
 from tinydb import TinyDB, Query
+from utilities import *
 import json
 
 # Comment out for testing for frontend
@@ -284,8 +285,39 @@ def send():
 
             modeFormat = {
                 "vehicle_name": vehicleName,
-                "mode": mode
+                "mode": mode,
+                "Controls" : {
+                    'UP' : 0,
+                    'DOWN' : 0,
+                    'LEFT' : 0,
+                    'RIGHT' : 0,
+                    'X/ARROW_DOWN' : 0,
+                    'CIRCLE/ARROW_RIGHT' : 0,
+                    'SQUARE/ARROW_LEFT' : 0,
+                    'TRIANGLE/ARROW_UP' : 0,
+                    'L1/1' : 0,
+                    'R1/2' : 0,
+                    'L2/3' : 0,
+                    'R2/4' : 0,
+                    'L3/5' : 0,
+                    'R3/6' : 0,
+                    'SHARE/7' : 0,
+                    'PS/8' : 0,
+                    'OPTIONS/9' : 0
+                }
             }
+
+            if (mode == "Manual" and vehicleName == "ERU"):
+                #Initialize_Variables()
+                pygame.init() #initialize pygame
+                pygame.display.set_mode(((4,4)))
+                controller_mode = False
+                manual = True
+                running = True
+                Initialize_Controller() #set controller buttons
+                while running: #while loop to take inputs 
+                    Inputs(controller_mode, manual, running, modeFormat) #call inputs method
+
             sampleGCS.getPacket.getName(vehicleName)
             # Write the dictionary to the JSON File
             jsonFile = open("manualOverride.json", "w")

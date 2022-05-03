@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 import json, os
 
+'''
 #definition to instantiate variables in a json format
 data = {}
 data['Controls'] = []
@@ -25,6 +26,7 @@ data['Controls'].append({
     'PS/8' : 0,
     'OPTIONS/9' : 0
 })
+'''
 
 #definition to initialize the controller
 def Initialize_Controller():
@@ -42,7 +44,7 @@ def Initialize_Controller():
     analog_keys = {0:0, 1:0, 2:0, 3:0, 4:-1, 5: -1 }
 
 #defintion for inputs
-def Inputs(mode, manual, running):
+def Inputs(mode, manual, running, data):
     global button_keys, analog_keys #set global variables
     for event in pygame.event.get():
         #check for mode
@@ -156,7 +158,8 @@ def Inputs(mode, manual, running):
                     data['Controls'][0]['L3/5'] = 1
                 if event.button == button_keys['right_stick_click']:
                     data['Controls'][0]['R3/6'] = 1
-                if event.button == button_keys['share']:
+                if event.button == button_keys['share']: #to switch to keyboard control
+                    mode = True
                     data['Controls'][0]['SHARE/7'] = 1
                 if event.button == button_keys['PS']:
                     data['Controls'][0]['PS/8'] = 1
@@ -165,9 +168,6 @@ def Inputs(mode, manual, running):
                 #to quit manual control
                 if event.button == button_keys['PS']:
                     running = False
-                #to switch to keyboard control
-                if event.button == button_keys['up_arrow']:
-                    mode = True
             #handle controller release set values equal to 0
             elif event.type == pygame.JOYBUTTONUP:
                 if event.button == button_keys['up_arrow']:
@@ -229,12 +229,15 @@ def Inputs(mode, manual, running):
                     data['Controls'][0]['R2/4'] = analog_keys[3]
                 else:
                     data['Controls'][0]['R2/4'] = 0
-        #update json file
-        with open("data.json", "w") as write_file:
-            # formatted_data = json.dumps(data, indent=4)
-            json.dump(data, write_file)
         # close if not running
         if (running == False):
             pygame.display.quit()
             pygame.quit()
             exit()
+
+'''
+        #update json file
+        with open("manualOverride.json", "w") as write_file:
+            # formatted_data = json.dumps(data, indent=4)
+            json.append(data, write_file)
+'''
