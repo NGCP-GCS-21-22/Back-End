@@ -36,6 +36,10 @@
                 "id": 0
             },
             {
+                "stage": "ERU Drop",
+                "id": 3
+            },
+            {
                 "stage": "ERU Landing Sequence",
                 "id": 4
             },
