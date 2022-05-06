@@ -291,6 +291,8 @@ def send():
                     'DOWN' : 0,
                     'LEFT' : 0,
                     'RIGHT' : 0,
+                    'UP/DOWN' : 0,
+                    'LEFT/RIGHT' : 0,
                     'X/ARROW_DOWN' : 0,
                     'CIRCLE/ARROW_RIGHT' : 0,
                     'SQUARE/ARROW_LEFT' : 0,
@@ -307,6 +309,12 @@ def send():
                 }
             }
 
+            sampleGCS.getPacket.getName(vehicleName)
+            # Write the dictionary to the JSON File
+            jsonFile = open("manualOverride.json", "w")
+            json.dump(modeFormat, jsonFile)
+            jsonFile.close()
+
             if (mode == "Manual" and vehicleName == "ERU"):
                 #Initialize_Variables()
                 pygame.init() #initialize pygame
@@ -318,12 +326,7 @@ def send():
                 while running: #while loop to take inputs 
                     Inputs(controller_mode, manual, running, modeFormat) #call inputs method
 
-            sampleGCS.getPacket.getName(vehicleName)
-            # Write the dictionary to the JSON File
-            jsonFile = open("manualOverride.json", "w")
-            json.dump(modeFormat, jsonFile)
-            jsonFile.close()
-
+            print(modeFormat)
             return modeFormat
 
 

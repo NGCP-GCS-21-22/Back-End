@@ -8,10 +8,8 @@ import json, os
 data = {}
 data['Controls'] = []
 data['Controls'].append({
-    'UP' : 0,
-    'DOWN' : 0,
-    'LEFT' : 0,
-    'RIGHT' : 0,
+    'UP/DOWN' : 0,
+    'LEFT/RIGHT' : 0,
     'X/ARROW_DOWN' : 0,
     'CIRCLE/ARROW_RIGHT' : 0,
     'SQUARE/ARROW_LEFT' : 0,
@@ -204,23 +202,15 @@ def Inputs(mode, manual, running, data):
             if event.type == pygame.JOYAXISMOTION:
                 analog_keys[event.axis] = event.value
                 if abs(analog_keys[1]) > .4:
-                    if analog_keys[1] < -.7:
-                        data['Controls'][0]['UP'] = analog_keys[1]
+                    if analog_keys[1] < -.7 or analog_keys[1] > .7:
+                        data['Controls'][0]['UP/DOWN'] = analog_keys[1]
                     else:
-                        data['Controls'][0]['UP'] = 0
-                    if analog_keys[1] > .7:
-                        data['Controls'][0]['DOWN'] = analog_keys[1]
-                    else:
-                        data['Controls'][0]['DOWN'] = 0
+                        data['Controls'][0]['UP/DOWN'] = 0
                 if abs(analog_keys[0]) > .4:
-                    if analog_keys[0] < -.7:
-                        data['Controls'][0]['LEFT'] = analog_keys[0]
+                    if analog_keys[0] < -.7 or analog_keys[1] > .7:
+                        data['Controls'][0]['LEFT/RIGHT'] = analog_keys[0]
                     else:
-                        data['Controls'][0]['LEFT'] = 0
-                    if analog_keys[0] > .7:
-                        data['Controls'][0]['RIGHT'] = analog_keys[0]
-                    else:
-                        data['Controls'][0]['RIGHT'] = 0
+                        data['Controls'][0]['LEFT/RIGHT'] = 0
                 if analog_keys[2] > .1:
                     data['Controls'][0]['L2/3'] = analog_keys[2]
                 else:
@@ -234,7 +224,7 @@ def Inputs(mode, manual, running, data):
             pygame.display.quit()
             pygame.quit()
             exit()
-
+    return data
 '''
         #update json file
         with open("manualOverride.json", "w") as write_file:
