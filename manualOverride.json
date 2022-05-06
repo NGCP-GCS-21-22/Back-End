@@ -1,1 +1,1 @@
-{"vehicle_name": "MAC", "mode": "Autonomous"}
+{"vehicle_name": "ERU", "mode": "Manual", "Controls": {"UP": 0, "DOWN": 0, "LEFT": 0, "RIGHT": 0, "UP/DOWN": 0, "LEFT/RIGHT": 0, "X/ARROW_DOWN": 0, "CIRCLE/ARROW_RIGHT": 0, "SQUARE/ARROW_LEFT": 0, "TRIANGLE/ARROW_UP": 0, "L1/1": 0, "R1/2": 0, "L2/3": 0, "R2/4": 0, "L3/5": 0, "R3/6": 0, "SHARE/7": 0, "PS/8": 0, "OPTIONS/9": 0}}

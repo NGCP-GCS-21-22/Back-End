@@ -12,7 +12,7 @@ from utilities import *
 import json
 
 # Comment out for testing for frontend
-import sampleGCS
+#import sampleGCS
 
 import xbee
 import os
@@ -22,7 +22,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Comment out for testing for frontend
-sampleGCS.getPacket.start_receiving()
+#sampleGCS.getPacket.start_receiving()
 
 
 # # Update the database with new entries
@@ -217,7 +217,7 @@ def send():
             # Comment out for testing for frontend
             ########################################################
             # if send is true
-            sampleGCS.getPacket.getName(vehicleName)
+            #sampleGCS.getPacket.getName(vehicleName)
             # time.sleep(1)
             ########################################################
             # Query the database for the requested vehicle & save into dictionary
@@ -240,7 +240,7 @@ def send():
             # print(requestData['data'])
             updateStage.updateTime(requestData['data'], now)
             dataInfo = requestData['data']
-            sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
+            #sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
             return 'Update Complete'
 
         # OLD ENDPOINT: getGeneralStage
@@ -309,7 +309,7 @@ def send():
                 }
             }
 
-            sampleGCS.getPacket.getName(vehicleName)
+            #sampleGCS.getPacket.getName(vehicleName)
             # Write the dictionary to the JSON File
             jsonFile = open("manualOverride.json", "w")
             json.dump(modeFormat, jsonFile)
@@ -319,15 +319,15 @@ def send():
                 #Initialize_Variables()
                 pygame.init() #initialize pygame
                 pygame.display.set_mode(((4,4)))
-                controller_mode = False
+                controller_mode = True
                 manual = True
                 running = True
                 Initialize_Controller() #set controller buttons
                 while running: #while loop to take inputs 
-                    Inputs(controller_mode, manual, running, modeFormat) #call inputs method
-
-            print(modeFormat)
+                    modeFormat = Inputs(controller_mode, manual, running, modeFormat) #call inputs method
+                    print(modeFormat)
             return modeFormat
+            # HEY YOU NEED MULTI THREADING :D
 
 
 # create db.json file for storing geofence data

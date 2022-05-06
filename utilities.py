@@ -51,39 +51,39 @@ def Inputs(mode, manual, running, data):
             #handle keyboard press
             if event.type == KEYDOWN:
                 if event.key == K_w:
-                    data['Controls'][0]['UP'] = 1
+                    data['Controls']['UP'] = 1
                 if event.key == K_s:
-                    data['Controls'][0]['DOWN'] = 1 
+                    data['Controls']['DOWN'] = 1 
                 if event.key == K_a:
-                    data['Controls'][0]['LEFT'] = 1 
+                    data['Controls']['LEFT'] = 1 
                 if event.key == K_d:
-                    data['Controls'][0]['RIGHT'] = 1 
+                    data['Controls']['RIGHT'] = 1 
                 if event.key == K_DOWN:
-                    data['Controls'][0]['X/ARROW_DOWN'] = 1
+                    data['Controls']['X/ARROW_DOWN'] = 1
                 if event.key == K_RIGHT:
-                    data['Controls'][0]['CIRCLE/ARROW_RIGHT'] = 1 
+                    data['Controls']['CIRCLE/ARROW_RIGHT'] = 1 
                 if event.key == K_LEFT:
-                    data['Controls'][0]['SQUARE/ARROW_LEFT'] = 1 
+                    data['Controls']['SQUARE/ARROW_LEFT'] = 1 
                 if event.key == K_UP:
-                    data['Controls'][0]['TRIANGLE/ARROW_UP'] = 1 
+                    data['Controls']['TRIANGLE/ARROW_UP'] = 1 
                 if event.key == K_1:
-                    data['Controls'][0]['L1/1'] = 1
+                    data['Controls']['L1/1'] = 1
                 if event.key == K_2:
-                    data['Controls'][0]['R1/2'] = 1 
+                    data['Controls']['R1/2'] = 1 
                 if event.key == K_3:
-                    data['Controls'][0]['L2/3'] = 1 
+                    data['Controls']['L2/3'] = 1 
                 if event.key == K_4:
-                    data['Controls'][0]['R2/4'] = 1 
+                    data['Controls']['R2/4'] = 1 
                 if event.key == K_5:
-                    data['Controls'][0]['L3/5'] = 1 
+                    data['Controls']['L3/5'] = 1 
                 if event.key == K_6:
-                    data['Controls'][0]['R3/6'] = 1 
+                    data['Controls']['R3/6'] = 1 
                 if event.key == K_7:
-                    data['Controls'][0]['SHARE/7'] = 1
+                    data['Controls']['SHARE/7'] = 1
                 if event.key == K_8:
-                    data['Controls'][0]['PS/8'] = 1 
+                    data['Controls']['PS/8'] = 1 
                 if event.key == K_9:
-                    data['Controls'][0]['OPTIONS/9'] = 1 
+                    data['Controls']['OPTIONS/9'] = 1 
                 #to quit manual control
                 if event.key == K_q:
                     running = False
@@ -94,137 +94,137 @@ def Inputs(mode, manual, running, data):
             #handle keyboard release set values equal to 0
             elif event.type == KEYUP:
                 if event.key == K_w:
-                    data['Controls'][0]['UP'] = 0    
+                    data['Controls']['UP'] = 0    
                 if event.key == K_s:
-                    data['Controls'][0]['DOWN'] = 0 
+                    data['Controls']['DOWN'] = 0 
                 if event.key == K_a:
-                    data['Controls'][0]['LEFT'] = 0 
+                    data['Controls']['LEFT'] = 0 
                 if event.key == K_d:
-                    data['Controls'][0]['RIGHT'] = 0
+                    data['Controls']['RIGHT'] = 0
                 if event.key == K_DOWN:
-                    data['Controls'][0]['X/ARROW_DOWN'] = 0
+                    data['Controls']['X/ARROW_DOWN'] = 0
                 if event.key == K_RIGHT:
-                    data['Controls'][0]['CIRCLE/ARROW_RIGHT'] = 0
+                    data['Controls']['CIRCLE/ARROW_RIGHT'] = 0
                 if event.key == K_LEFT:
-                    data['Controls'][0]['SQUARE/ARROW_LEFT'] = 0
+                    data['Controls']['SQUARE/ARROW_LEFT'] = 0
                 if event.key == K_UP:
-                    data['Controls'][0]['TRIANGLE/ARROW_UP'] = 0
+                    data['Controls']['TRIANGLE/ARROW_UP'] = 0
                 if event.key == K_1:
-                    data['Controls'][0]['L1/1'] = 0
+                    data['Controls']['L1/1'] = 0
                 if event.key == K_2:
-                    data['Controls'][0]['R1/2'] = 0
+                    data['Controls']['R1/2'] = 0
                 if event.key == K_3:
-                    data['Controls'][0]['L2/3'] = 0
+                    data['Controls']['L2/3'] = 0
                 if event.key == K_4:
-                    data['Controls'][0]['R2/4'] = 0
+                    data['Controls']['R2/4'] = 0
                 if event.key == K_5:
-                    data['Controls'][0]['L3/5'] = 0
+                    data['Controls']['L3/5'] = 0
                 if event.key == K_6:
-                    data['Controls'][0]['R3/6'] = 0
+                    data['Controls']['R3/6'] = 0
                 if event.key == K_7:
-                    data['Controls'][0]['SHARE/7'] = 0
+                    data['Controls']['SHARE/7'] = 0
                 if event.key == K_8:
-                    data['Controls'][0]['PS/8'] = 0
+                    data['Controls']['PS/8'] = 0
                 if event.key == K_9:
-                    data['Controls'][0]['OPTIONS/9'] = 0
+                    data['Controls']['OPTIONS/9'] = 0
     
         #else mode is controller
         else:
             #handle controller press
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.button == button_keys['up_arrow']:
-                    data['Controls'][0]['UP'] = 1
+                    data['Controls']['UP'] = 1
                 if event.button == button_keys['down_arrow']:
-                    data['Controls'][0]['DOWN'] = 1
+                    data['Controls']['DOWN'] = 1
                 if event.button == button_keys['left_arrow']:
-                    data['Controls'][0]['LEFT'] = 1
+                    data['Controls']['LEFT'] = 1
                 if event.button == button_keys['right_arrow']:
-                    data['Controls'][0]['RIGHT'] = 1
+                    data['Controls']['RIGHT'] = 1
                 if event.button == button_keys['x']:
-                    data['Controls'][0]['X/ARROW_DOWN'] = 1
+                    data['Controls']['X/ARROW_DOWN'] = 1
                 if event.button == button_keys['circle']:
-                    data['Controls'][0]['CIRCLE/ARROW_RIGHT'] = 1
+                    data['Controls']['CIRCLE/ARROW_RIGHT'] = 1
                 if event.button == button_keys['square']:
-                    data['Controls'][0]['SQUARE/ARROW_LEFT'] = 1
+                    data['Controls']['SQUARE/ARROW_LEFT'] = 1
                 if event.button == button_keys['triangle']:
-                    data['Controls'][0]['TRIANGLE/ARROW_UP'] = 1
+                    data['Controls']['TRIANGLE/ARROW_UP'] = 1
                 if event.button == button_keys['L1']:
-                    data['Controls'][0]['L1/1'] = 1
+                    data['Controls']['L1/1'] = 1
                 if event.button == button_keys['R1']:
-                    data['Controls'][0]['R1/2'] = 1
+                    data['Controls']['R1/2'] = 1
                 if event.button == button_keys['left_stick_click']:
-                    data['Controls'][0]['L3/5'] = 1
+                    data['Controls']['L3/5'] = 1
                 if event.button == button_keys['right_stick_click']:
-                    data['Controls'][0]['R3/6'] = 1
+                    data['Controls']['R3/6'] = 1
                 if event.button == button_keys['share']: #to switch to keyboard control
                     mode = True
-                    data['Controls'][0]['SHARE/7'] = 1
+                    data['Controls']['SHARE/7'] = 1
                 if event.button == button_keys['PS']:
-                    data['Controls'][0]['PS/8'] = 1
+                    data['Controls']['PS/8'] = 1
                 if event.button == button_keys['options']:
-                    data['Controls'][0]['OPTIONS/9'] = 1
+                    data['Controls']['OPTIONS/9'] = 1
                 #to quit manual control
                 if event.button == button_keys['PS']:
                     running = False
             #handle controller release set values equal to 0
             elif event.type == pygame.JOYBUTTONUP:
                 if event.button == button_keys['up_arrow']:
-                    data['Controls'][0]['UP'] = 0
+                    data['Controls']['UP'] = 0
                 if event.button == button_keys['down_arrow']:
-                    data['Controls'][0]['DOWN'] = 0
+                    data['Controls']['DOWN'] = 0
                 if event.button == button_keys['left_arrow']:
-                    data['Controls'][0]['LEFT'] = 0
+                    data['Controls']['LEFT'] = 0
                 if event.button == button_keys['right_arrow']:
-                    data['Controls'][0]['RIGHT'] = 0
+                    data['Controls']['RIGHT'] = 0
                 if event.button == button_keys['x']:
-                    data['Controls'][0]['X/ARROW_DOWN'] = 0
+                    data['Controls']['X/ARROW_DOWN'] = 0
                 if event.button == button_keys['circle']:
-                    data['Controls'][0]['CIRCLE/ARROW_RIGHT'] = 0
+                    data['Controls']['CIRCLE/ARROW_RIGHT'] = 0
                 if event.button == button_keys['square']:
-                    data['Controls'][0]['SQUARE/ARROW_LEFT'] = 0
+                    data['Controls']['SQUARE/ARROW_LEFT'] = 0
                 if event.button == button_keys['triangle']:
-                    data['Controls'][0]['TRIANGLE/ARROW_UP'] = 0
+                    data['Controls']['TRIANGLE/ARROW_UP'] = 0
                 if event.button == button_keys['L1']:
-                    data['Controls'][0]['L1/1'] = 0
+                    data['Controls']['L1/1'] = 0
                 if event.button == button_keys['R1']:
-                    data['Controls'][0]['R1/2'] = 0
+                    data['Controls']['R1/2'] = 0
                 if event.button == button_keys['left_stick_click']:
-                    data['Controls'][0]['L3/5'] = 0
+                    data['Controls']['L3/5'] = 0
                 if event.button == button_keys['right_stick_click']:
-                    data['Controls'][0]['R3/6'] = 0
+                    data['Controls']['R3/6'] = 0
                 if event.button == button_keys['share']:
-                    data['Controls'][0]['SHARE/7'] = 0
+                    data['Controls']['SHARE/7'] = 0
                 if event.button == button_keys['PS']:
-                    data['Controls'][0]['PS/8'] = 0
+                    data['Controls']['PS/8'] = 0
                 if event.button == button_keys['options']:
-                    data['Controls'][0]['OPTIONS/9'] = 0
+                    data['Controls']['OPTIONS/9'] = 0
             #handle controller analog
             if event.type == pygame.JOYAXISMOTION:
                 analog_keys[event.axis] = event.value
                 if abs(analog_keys[1]) > .4:
                     if analog_keys[1] < -.7 or analog_keys[1] > .7:
-                        data['Controls'][0]['UP/DOWN'] = analog_keys[1]
+                        data['Controls']['UP/DOWN'] = analog_keys[1]
                     else:
-                        data['Controls'][0]['UP/DOWN'] = 0
+                        data['Controls']['UP/DOWN'] = 0
                 if abs(analog_keys[0]) > .4:
                     if analog_keys[0] < -.7 or analog_keys[1] > .7:
-                        data['Controls'][0]['LEFT/RIGHT'] = analog_keys[0]
+                        data['Controls']['LEFT/RIGHT'] = analog_keys[0]
                     else:
-                        data['Controls'][0]['LEFT/RIGHT'] = 0
+                        data['Controls']['LEFT/RIGHT'] = 0
                 if analog_keys[2] > .1:
-                    data['Controls'][0]['L2/3'] = analog_keys[2]
+                    data['Controls']['L2/3'] = analog_keys[2]
                 else:
-                    data['Controls'][0]['L2/3'] = 0
+                    data['Controls']['L2/3'] = 0
                 if analog_keys[3] > .1:
-                    data['Controls'][0]['R2/4'] = analog_keys[3]
+                    data['Controls']['R2/4'] = analog_keys[3]
                 else:
-                    data['Controls'][0]['R2/4'] = 0
+                    data['Controls']['R2/4'] = 0
         # close if not running
         if (running == False):
             pygame.display.quit()
             pygame.quit()
             exit()
-    return data
+        return data
 '''
         #update json file
         with open("manualOverride.json", "w") as write_file:
