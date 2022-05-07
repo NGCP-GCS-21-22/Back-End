@@ -449,7 +449,7 @@ def get_search_area():
     result={}
     if request.method == 'GET':
         result = searchAreaTable.all()
-    return jsonify(result[0]["search_area"]) if not is_empty(result) else jsonify({})
+    return jsonify(result[0]["search_area"]) if not is_empty(result) else jsonify([])
 
 ####### Uncommend to completely remove all tables and run again
 # db.drop_table('MAC')
