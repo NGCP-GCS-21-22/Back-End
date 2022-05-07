@@ -11,7 +11,7 @@ from tinydb import TinyDB, Query
 import json
 
 # Comment out for testing for frontend
-# import sampleGCS
+import sampleGCS
 
 import xbee
 import os
@@ -21,7 +21,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Comment out for testing for frontend
-# sampleGCS.getPacket.start_receiving()
+sampleGCS.getPacket.start_receiving()
 
 
 # # Update the database with new entries
@@ -216,7 +216,7 @@ def send():
             # Comment out for testing for frontend
             ########################################################
             # if send is true
-            # sampleGCS.getPacket.getName(vehicleName)
+            sampleGCS.getPacket.getName(vehicleName)
             # time.sleep(1)
             ########################################################
             # Query the database for the requested vehicle & save into dictionary
@@ -233,13 +233,13 @@ def send():
             # Object from frontened
             # requestData = request.get_json()
 
-            #sampleGCS.getPacket.getName(postData.vehicleName)
+            sampleGCS.getPacket.getName(postData.vehicleName)
             #print(now)
             #print(requestData)
             # print(requestData['data'])
             updateStage.updateTime(requestData['data'], now)
             dataInfo = requestData['data']
-            # sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
+            sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
             return 'Update Complete'
 
         # OLD ENDPOINT: getGeneralStage
@@ -286,7 +286,7 @@ def send():
                 "vehicle_name": vehicleName,
                 "mode": mode
             }
-            # sampleGCS.getPacket.getName(vehicleName)
+            sampleGCS.getPacket.getName(vehicleName)
             # Write the dictionary to the JSON File
             jsonFile = open("manualOverride.json", "w")
             json.dump(modeFormat, jsonFile)
@@ -375,13 +375,8 @@ def remove_geofence(vehicle_id):
 @app.route('/postERUDropLocation', methods=['POST'])
 def post_drop_location():
     response_object = {'status': 'success'}
-    if request.method == 'POST':
-        drop_coordinates = request.get_json(force=True)
-        temp=list(drop_coordinates.values())
-        for x in temp:
-            if(type(x) != float):
-                response_object['status'] = 'Fail-wrong input format'
-                return jsonify(response_object)
+    drop_coordinates = request.get_json(force=True)
+    if is_correct_coordinates_format(drop_coordinates):
         dropCoordinatesTable.truncate()
         dropCoordinatesTable.insert(drop_coordinates)
         response_object['message'] = 'data added!'
@@ -390,13 +385,8 @@ def post_drop_location():
 @app.route('/postEvacuationZone', methods=['POST'])
 def post_evacuation_zone():
     response_object = {'status': 'success'}
-    if request.method == 'POST':
-        evac_coordinates = request.get_json(force=True)
-        temp=list(evac_coordinates.values())
-        for x in temp:
-            if(type(x) != float):
-                response_object['status'] = 'Fail-wrong input format'
-                return jsonify(response_object)
+    evac_coordinates = request.get_json(force=True)
+    if is_correct_coordinates_format(evac_coordinates):
         evacuationCoordinatesTable.truncate()
         evacuationCoordinatesTable.insert(evac_coordinates)
         response_object['message'] = 'data added!'
@@ -418,8 +408,8 @@ def get_mission_waypoint(vehicle_name):
 @app.route('/postHomeCoordinates/<vehicle_name>', methods=['POST'])
 def post_home_location(vehicle_name):
     response_object = {'status': 'success'}
-    if request.method == 'POST':
-        home_coordinates = request.get_json(force=True)
+    home_coordinates = request.get_json(force=True)
+    if is_correct_coordinates_format(home_coordinates):
         if(vehicle_name == 'MAC'):
             homeLocationTable.upsert(home_coordinates, query.vehicle=='MAC')
         elif(vehicle_name == 'ERU'):
