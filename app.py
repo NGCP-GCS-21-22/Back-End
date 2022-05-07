@@ -451,12 +451,15 @@ def get_search_area():
         result = searchAreaTable.all()
     return jsonify(result[0]) if not is_empty(result) else jsonify({})
 
-####### commands that modify database without requests
-# db.drop_table('_default')
-# db.drop_table('search_area_coordinates')
+####### Uncommend to completely remove all tables and run again
+# db.drop_table('MAC')
+# db.drop_table('ERU')
+# db.drop_table('MEA')
 # db.drop_table('drop_coordinates')
 # db.drop_table('evacuation_coordinates')
-''' Uncomment below to make all tables empty and run again '''
+# db.drop_table('search_area_coordinates')
+# db.drop_table('home_coordinates')
+####### Uncomment below to empty out all tablesand run again
 # MACTable.truncate()
 # ERUTable.truncate()
 # MEATable.truncate()
