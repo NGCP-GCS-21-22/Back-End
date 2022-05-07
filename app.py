@@ -312,7 +312,23 @@ query = Query()
 
 def is_empty(result):
     return True if len(result)==0 else False
+def is_correct_coordinates_format(obj):
+    if not is_empty(obj):
+        # lat = -90 to 90
+        # lng = -180 to 180
+        if (isinstance(obj["lat"], float)) or (isinstance(obj["lat"], int)):
+            if not (-90 <= obj["lat"] <= 90):
+                raise Exception("ERROR: Latitude not valid")
+        else:
+            raise Exception("ERROR: Latitude not a float")
 
+        if isinstance(obj["lng"], float) or isinstance(obj["lng"], int):
+            if not (-180 <= obj["lng"] <= 180):
+                raise Exception("ERROR: Longitude not valid")
+        else:
+            raise Exception("ERROR: Longitude not a float")
+        return True
+    return False
 '''
 SUBMIT ALL: clear all data and add new submitted data
 DELETE ALL: clear all data and leave it be
@@ -339,16 +355,10 @@ def get_geofence(vehicle_name):
     result={}
     if vehicle_name == 'MAC':
         result = MACTable.all()
-        if result == None:
-            return {"ERROR: Nothing to be shown"}
     elif vehicle_name == 'ERU':
         result = ERUTable.all()
-        if result == None:
-            return {"ERROR: Nothing to be shown"}
     elif vehicle_name == 'MEA':
         result = MEATable.all()
-        if result == None:
-            return {"ERROR: Nothing to be shown"}
     return jsonify(result[0]['geofence']) if not is_empty(result) else jsonify({})
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
@@ -449,7 +459,7 @@ def get_search_area():
     result={}
     if request.method == 'GET':
         result = searchAreaTable.all()
-    return jsonify(result[0]) if not is_empty(result) else jsonify({})
+    return jsonify(result[0]["search_area"]) if not is_empty(result) else jsonify({})
 
 ####### Uncommend to completely remove all tables and run again
 # db.drop_table('MAC')
