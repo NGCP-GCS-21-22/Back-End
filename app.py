@@ -11,7 +11,7 @@ from tinydb import TinyDB, Query
 import json
 
 # Comment out for testing for frontend
-import sampleGCS
+# import sampleGCS
 
 import xbee
 import os
@@ -21,7 +21,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Comment out for testing for frontend
-sampleGCS.getPacket.start_receiving()
+# sampleGCS.getPacket.start_receiving()
 
 
 # # Update the database with new entries
@@ -216,7 +216,7 @@ def send():
             # Comment out for testing for frontend
             ########################################################
             # if send is true
-            sampleGCS.getPacket.getName(vehicleName)
+            # sampleGCS.getPacket.getName(vehicleName)
             # time.sleep(1)
             ########################################################
             # Query the database for the requested vehicle & save into dictionary
@@ -239,7 +239,7 @@ def send():
             # print(requestData['data'])
             updateStage.updateTime(requestData['data'], now)
             dataInfo = requestData['data']
-            sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
+            # sampleGCS.getPacket.getName(dataInfo['vehicle_name'])
             return 'Update Complete'
 
         # OLD ENDPOINT: getGeneralStage
@@ -255,7 +255,7 @@ def send():
                 "name": dataValue['stage_name'],
                 "estop": dataValue['estop']
             }
-            
+
             return dataFormat
 
         # OLD ENDPOINT: createNewMission
@@ -286,7 +286,7 @@ def send():
                 "vehicle_name": vehicleName,
                 "mode": mode
             }
-            sampleGCS.getPacket.getName(vehicleName)
+            # sampleGCS.getPacket.getName(vehicleName)
             # Write the dictionary to the JSON File
             jsonFile = open("manualOverride.json", "w")
             json.dump(modeFormat, jsonFile)
@@ -310,12 +310,8 @@ homeLocationTable = db.table('home_coordinates')
 # create an instance of Query class that can help us search the database
 query = Query()
 
-############## function for debugging purpose ################
-# @app.route('/', methods=['GET', 'POST'])
-# def debug():
-#     # print(db.all())
-#     return json.dumps(MACTable.all())
-# mea and eru share the same drop location and evacuation zone
+def is_empty(result):
+    return True if len(result)==0 else False
 
 '''
 SUBMIT ALL: clear all data and add new submitted data
@@ -340,7 +336,7 @@ def submit_geofence(vehicle_name):
 
 @app.route('/getGeofence/<vehicle_name>', methods=['GET'])
 def get_geofence(vehicle_name):
-    result=None
+    result={}
     if vehicle_name == 'MAC':
         result = MACTable.all()
         if result == None:
@@ -353,8 +349,7 @@ def get_geofence(vehicle_name):
         result = MEATable.all()
         if result == None:
             return {"ERROR: Nothing to be shown"}
-    return jsonify(result[0]['geofence'])
-
+    return jsonify(result[0]['geofence']) if not is_empty(result) else jsonify({})
 
 @app.route('/gcs/geofence/<vehicle_id>', methods=['DELETE'])
 def remove_geofence(vehicle_id):
@@ -400,14 +395,14 @@ def post_evacuation_zone():
 # return drop location for MAC and evacuation zone for MEA and ERU
 @app.route('/getMissionWaypoint/<vehicle_name>', methods=['GET'])
 def get_mission_waypoint(vehicle_name):
-    result=None
+    result={}
     if request.method == 'GET':
         if(vehicle_name == 'MAC'):
             result = dropCoordinatesTable.all()
         elif(vehicle_name == 'MEA' or vehicle_name == 'ERU'):
             result = evacuationCoordinatesTable.all()
         else: pass
-    return jsonify(result[0])
+    return jsonify(result[0]) if not is_empty(result) else jsonify({})
 
 # each vechicle has its own home location
 @app.route('/postHomeCoordinates/<vehicle_name>', methods=['POST'])
@@ -428,7 +423,7 @@ def post_home_location(vehicle_name):
 # each vehicle has its own home location
 @app.route('/getHomeCoordinates/<vehicle_name>', methods=['GET'])
 def get_home_location(vehicle_name):
-    result=None
+    result={}
     if request.method == 'GET':
         if(vehicle_name == 'MAC'):
             result=homeLocationTable.search(query.vehicle == 'MAC')
@@ -437,7 +432,7 @@ def get_home_location(vehicle_name):
         elif(vehicle_name == 'MEA'):
             result=homeLocationTable.search(query.vehicle == 'MEA')
         else: pass
-    return jsonify(result[0])
+    return jsonify(result[0]) if not is_empty(result) else jsonify({})
 
 @app.route('/postSearchArea', methods=['POST'])
 def post_search_area():
@@ -451,16 +446,24 @@ def post_search_area():
 
 @app.route('/getSearchArea', methods=['GET'])
 def get_search_area():
-    result=None
+    result={}
     if request.method == 'GET':
         result = searchAreaTable.all()
-    return jsonify(result[0]["search_area"])
+    return jsonify(result[0]) if not is_empty(result) else jsonify({})
 
 ####### commands that modify database without requests
 # db.drop_table('_default')
 # db.drop_table('search_area_coordinates')
 # db.drop_table('drop_coordinates')
 # db.drop_table('evacuation_coordinates')
+''' Uncomment below to make all tables empty and run again '''
+# MACTable.truncate()
+# ERUTable.truncate()
+# MEATable.truncate()
+# dropCoordinatesTable.truncate()
+# evacuationCoordinatesTable.truncate()
+# searchAreaTable.truncate()
+# homeLocationTable.truncate()
 
 
 # the host value allows traffic from anywhere to run this
