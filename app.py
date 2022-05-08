@@ -17,7 +17,7 @@ import xbee
 import os
 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, max_age=600)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Comment out for testing for frontend
