@@ -52,7 +52,7 @@ class updateDatabase():
         requestedVehicle = updateVehicle.newLastPacketTime(98)
         requestedVehicle = updateVehicle.newTime(newestPacketTime)
         requestedVehicle = updateVehicle.newErrMsg("Overheat")
-        print(gcsPacket)
+        #print(gcsPacket)
         currentStage = requestedVehicle['current_stage']
         stageName = updateStage.updateStageName(currentStage)
         requestedVehicle = updateVehicle.newStageName(stageName)
@@ -132,99 +132,85 @@ class Xbee:
 
         device.add_data_received_callback(receive_packets)
 
-        xbee_end_time = int(round(time.time() * 1000))
-        xbee_start_time = 0
-        xbee_end_time1 = int(round(time.time() * 1000))
-        xbee_start_time1 = 0
-
-        xbee_receive_end_time = int(round(time.time() * 1000))
-        xbee_receive_start_time = int(round(time.time() * 1000))
-
+        TIMEOUT = 1000
         while True:
-            xbee_end_time = int(round(time.time() * 1000))
-            xbee_end_time1 = int(round(time.time() * 1000))
-            if (xbee_end_time - xbee_start_time > 300):
-                if send_flag.value == 1:
-                    send_flag.value = 0
-                    state = 1
-                    stop = False
-                    cmd = ""
-                    sent = False
-                    if (vehicleName.value == "ERU"):
-                        cmd = "e"
-                    #elif (vehicleName.value == "MAC"):
-                    #    cmd = "m"
-                    try:
-                        if cmd is "s":
-                            stop = not stop
-                        if cmd is "e":
-                            if (xbee_end_time1 - xbee_start_time1 > 5000):
-                                print("Sending to ERU with Request")
-                                xbee.read_lock.acquire()
-                                ToERU(stop, state, hiker_pos, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, 
-                                    ManualControl(controller_data[0], controller_data[1], controller_data[2], 
-                                                    controller_data[3], controller_data[4], controller_data[5], 
-                                                    controller_data[6], controller_data[7]), True, True
-                                    ).serialize().transmit(device, devices['eru'])
-                                xbee.read_lock.release()
-                                xbee_start_time1 = int(round(time.time() * 1000))
-                            else:
-                                print("Sending to ERU without Request")
-                                xbee.read_lock.acquire()
-                                ToERU(stop, state, hiker_pos, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, 
-                                    ManualControl(controller_data[0], controller_data[1], controller_data[2], 
-                                                    controller_data[3], controller_data[4], controller_data[5], 
-                                                    controller_data[6], controller_data[7]), True, False
-                                    ).serialize().transmit(device, devices['eru'])
-                                xbee.read_lock.release()
-                        if cmd is "m":
-                            print("Sending to MAC")
-                            #device.del_data_received_callback(getPacket.packet_received)
-                            ToMAC(None, state, hiker_pos, geo_bounds, [area], LatLng(5,5), LatLng(5.5,5.5), True
-                                ).serialize().transmit(device, devices['mac'])
-                            #sent = True       
-                    except KeyboardInterrupt:
+            if send_flag.value == 1:
+                print("Hi")
+                send_flag.value = 0
+                state = 1
+                stop = False
+                cmd = ""
+                sent = False
+                if (vehicleName.value == "ERU"):
+                    cmd = "e"
+                if (vehicleName.value == "MAC"):
+                    cmd = "m"
+                # if (vehicleName.value == "MEA"):
+                #     cmd = "l"
+                #elif (vehicleName.value == "MAC"):
+                #    cmd = "m"
+                try:
+                    if cmd is "s":
+                        stop = not stop
+                    if cmd is "e":
+                        print("Sending to ERU")
+                        xbee.read_lock.acquire()
+                        ToERU(stop, state, hiker_pos, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, 
+                            ManualControl(controller_data[0], controller_data[1], controller_data[2], 
+                                            controller_data[3], controller_data[4], controller_data[5], 
+                                            controller_data[6], controller_data[7]), True, True
+                            ).serialize().transmit(device, devices['eru'])
+                        xbee.read_lock.release()
+                    if cmd is "m":
+                        print("Sending to MAC")
                         #device.del_data_received_callback(getPacket.packet_received)
-                        pass
-                    finally:
-                        pass
-                xbee_start_time = int(round(time.time() * 1000))
-                #print("Time :" + str(xbee_end_time - xbee_start_time1))
-            #print("Time :" + str(xbee_end_time - xbee_start_time))
-            xbee_receive_end_time = int(round(time.time() * 1000))
-            try:
-               data = data_queue.get_nowait()
-               if type(data) == bytes:
-                   print("Time: " + str(xbee_receive_end_time - xbee_receive_start_time))
-                   receive_flag.value = 1
-                   decode_queue.put(ToGCS.deserialize(data))
-                   xbee_data_temp = decode_queue.get_nowait()
-                   xbee_data[0] = xbee_data_temp.altitude
-                   xbee_data[1] = xbee_data_temp.speed
-                   xbee_data[2] = xbee_data_temp.orientation.roll
-                   xbee_data[3] = xbee_data_temp.orientation.pitch
-                   xbee_data[4] = xbee_data_temp.orientation.yaw
-                   xbee_data[5] = xbee_data_temp.gps.lat
-                   xbee_data[6] = xbee_data_temp.gps.lng
-                   xbee_data[7] = xbee_data_temp.battery
-                   xbee_data[8] = xbee_data_temp.sensors_ok
-                   xbee_data[9] = xbee_data_temp.current_state
-                   xbee_data[10] = xbee_data_temp.state_complete
-                   xbee_data[11] = xbee_data_temp.hiker_position.lat
-                   xbee_data[12] = xbee_data_temp.hiker_position.lng
-                   xbee_data[13] = xbee_data_temp.status
-                   xbee_data[14] = xbee_data_temp.propulsion
-                   xbee_data[15] = xbee_data_temp.geofence_compliant
-                   xbee_data[16] = xbee_data_temp.manual_mode
-                   #print(xbee_data_temp)
+                        ToMAC(None, state, hiker_pos, geo_bounds, [area], LatLng(5,5), LatLng(5.5,5.5), True
+                            ).serialize().transmit(device, devices['mac'])
+                    # if cmd is "l":
+                    #     print("Sending to MEA")
+                    #     #device.del_data_received_callback(getPacket.packet_received)
+                    #     ToMEA(None, state, geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, True
+                    #         ).serialize().transmit(device, devices['mea'])
+                        #sent = True       
+                except KeyboardInterrupt:
+                    f = 0
+                    #device.del_data_received_callback(getPacket.packet_received)
+                current_time = int(round(time.time() * 1000))
+                xbee_end_time = current_time
+                xbee_start_time = current_time
+                while (xbee_end_time - xbee_start_time < TIMEOUT):
+                    xbee_end_time = int(round(time.time() * 1000))
+                    try:
+                        data = data_queue.get_nowait()
+                        if type(data) == bytes:
+                            receive_flag.value = 1
+                            decode_queue.put(ToGCS.deserialize(data))
+                            xbee_data_temp = decode_queue.get_nowait()
+                            xbee_data[0] = xbee_data_temp.altitude
+                            xbee_data[1] = xbee_data_temp.speed
+                            xbee_data[2] = xbee_data_temp.orientation.roll
+                            xbee_data[3] = xbee_data_temp.orientation.pitch
+                            xbee_data[4] = xbee_data_temp.orientation.yaw
+                            xbee_data[5] = xbee_data_temp.gps.lat
+                            xbee_data[6] = xbee_data_temp.gps.lng
+                            xbee_data[7] = xbee_data_temp.battery
+                            xbee_data[8] = xbee_data_temp.sensors_ok
+                            xbee_data[9] = xbee_data_temp.current_state
+                            xbee_data[10] = xbee_data_temp.state_complete
+                            xbee_data[11] = xbee_data_temp.hiker_position.lat
+                            xbee_data[12] = xbee_data_temp.hiker_position.lng
+                            xbee_data[13] = xbee_data_temp.status
+                            xbee_data[14] = xbee_data_temp.propulsion
+                            xbee_data[15] = xbee_data_temp.geofence_compliant
+                            xbee_data[16] = xbee_data_temp.manual_mode
+                            TIMEOUT = 1000
+                            break
+                            #print(xbee_data_temp)
 
-                   #print(self.decode_queue.qsize())
-            except queue.Empty:
-               # print("hi")
-               # If the packet buffer is empty, do nothing
-               # The TransmitThread object will call this function in the next iteration of its loop,
-               # so nothing is done here to simply let the thread check again
-               pass
-
-
-
+                            #print(self.decode_queue.qsize())
+                    except queue.Empty:
+                        TIMEOUT = 1000
+                        # print("hi")
+                        # If the packet buffer is empty, do nothing
+                        # The TransmitThread object will call this function in the next iteration of its loop,
+                        # so nothing is done here to simply let the thread check again

@@ -275,8 +275,10 @@ if __name__ == '__main__':
                 #                                 bool(controller_data[6]), bool(controller_data[7]))
 
                 send_flag.value = 1
-                newestPacketTime = now.strftime("%H:%M:%S")
-                updateDatabase.newEntries(xbee_data, newestPacketTime, vehicleName.value)
+                if receive_flag.value == 1:
+                    dataInfo = requestData['data']
+                    vehicleName.value = dataInfo['vehicle_name']
+                    receive_flag.value = 0
                 # time.sleep(1)
                 ########################################################
                 # Query the database for the requested vehicle & save into dictionary
@@ -303,8 +305,10 @@ if __name__ == '__main__':
 
 
                 updateStage.updateTime(requestData['data'], now)
-                dataInfo = requestData['data']
-                vehicleName.value = dataInfo['vehicle_name']
+                if receive_flag.value == 1:
+                    dataInfo = requestData['data']
+                    vehicleName.value = dataInfo['vehicle_name']
+                    receive_flag.value = 0
 
                 send_flag.value = 1
                 newestPacketTime = now.strftime("%H:%M:%S")
@@ -358,8 +362,10 @@ if __name__ == '__main__':
                 }
                 
                 send_flag.value = 1
-                newestPacketTime = now.strftime("%H:%M:%S")
-                updateDatabase.newEntries(xbee_data, newestPacketTime, vehicleName.value)
+                if receive_flag.value == 1:
+                    dataInfo = requestData['data']
+                    vehicleName.value = dataInfo['vehicle_name']
+                    receive_flag.value = 0
 
                 # sampleGCS.getName(vehicleName, controller_data[0], controller_data[1], controller_data[2], 
                 #                                 controller_data[3], controller_data[4], controller_data[5], 

@@ -434,25 +434,25 @@ class ManualControl():
 
 
 ## CODE FOR TESTING
-orientation = Orientation(1,1,1)
-gps = LatLng(2,2.0005)
-hiker = LatLng(1.5, 1.5)
+# orientation = Orientation(1,1,1)
+# gps = LatLng(2,2.0005)
+# hiker = LatLng(1.5, 1.5)
 
-togcs = ToGCS(1.5,10,orientation,gps,.9,True,3,False,hiker,1,True,True,False)
+# togcs = ToGCS(1.5,10,orientation,gps,.9,True,3,False,hiker,1,True,True,False)
 
-geo_bounds = [Geofence(True, [LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])]
-geo_bounds.append(Geofence(False, [LatLng(1,1),LatLng(2,1),LatLng(2,-1),LatLng(1,-1)]))
+# geo_bounds = [Geofence(True, [LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])]
+# geo_bounds.append(Geofence(False, [LatLng(1,1),LatLng(2,1),LatLng(2,-1),LatLng(1,-1)]))
 
-geo_empty = []
-mancon = ManualControl(.8,-.1,0,0,.8,0,False,False)
+# geo_empty = []
+# mancon = ManualControl(.8,-.1,0,0,.8,0,False,False)
 
-area = SearchArea([LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])
+# area = SearchArea([LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])
 
-tomac = ToMAC(None, 1, LatLng(1,1), geo_bounds, [area], LatLng(.5,.5), LatLng(.6,0), False)
-tomac2 = ToMAC((2.2,3.3,500), 1, LatLng(1,1), geo_empty, [area,area], LatLng(.5,.5), LatLng(.6,0), False)
+# tomac = ToMAC(None, 1, LatLng(1,1), geo_bounds, [area], LatLng(.5,.5), LatLng(.6,0), False)
+# tomac2 = ToMAC((2.2,3.3,500), 1, LatLng(1,1), geo_empty, [area,area], LatLng(.5,.5), LatLng(.6,0), False)
 
-toeru = ToERU(False, 1, LatLng(1,1), geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, mancon, True, False)
-toeru2 = ToERU(False, 1, LatLng(1,1), geo_empty, LatLng(5,5), LatLng(5.5,5.5), False, None, True, False)
+# toeru = ToERU(False, 1, LatLng(1,1), geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, mancon, True, False)
+# toeru2 = ToERU(False, 1, LatLng(1,1), geo_empty, LatLng(5,5), LatLng(5.5,5.5), False, None, True, False)
 
-tomea = ToMEA(None, 1, geo_empty, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
-tomea2 = ToMEA((5.5,5.5,1000), 1, geo_bounds, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
+# tomea = ToMEA(None, 1, geo_empty, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
+# tomea2 = ToMEA((5.5,5.5,1000), 1, geo_bounds, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
