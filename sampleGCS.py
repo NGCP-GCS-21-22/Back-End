@@ -64,7 +64,7 @@ class updateDatabase():
     
 class Xbee:
     def xbee_run(xbee_data, send_flag, receive_flag, vehicleName, xbee_send_data, controller_data):
-        comm_port = "COM8" # can be swapped out for "/dev/ttyUSB0" for serial connection
+        comm_port = "COM3" # can be swapped out for "/dev/ttyUSB0" for serial connection
         baud_rate = "115200"
 
         device = DigiMeshDevice(port=comm_port, baud_rate=baud_rate)
