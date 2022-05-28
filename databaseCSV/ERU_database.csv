@@ -1,2 +1,2 @@
 altitude,altitude_color,battery,current_stage,geofence_compliant,geofence_compliant_color,latitude,longitude,pitch,pitch_color,propulsion,propulsion_color,roll,roll_color,sensors_ok,speed,stage_completed,status,yaw,time_since_last_packet,last_packet_time,time,stage_name,mode,hiker_position_lat,hiker_position_lng,err_msg
-43.0,Red,72.0,2,1,Green,33.93441,-117.6318169,87.0,Red,0,Yellow,20.0,None,1,25.0,0,2,30.0,5,9,2022-01-01 00:00:00,Find the Hiker,Manual,33.9344055,-117.6306099,None
+43.0,Red,72.0,0,1,Green,33.93441,-117.6318169,87.0,Red,0,Yellow,20.0,None,1,25.0,0,2,30.0,5,9,2022-01-01 00:00:00,Ready to Start,Manual,33.9344055,-117.6306099,None
