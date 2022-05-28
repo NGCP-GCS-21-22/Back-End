@@ -69,7 +69,7 @@ class Packet:
 # ToGCS used to transmit all data needed to the GCS from a given vehicle
 class ToGCS:
     def __init__(self, altitude: decimal, speed: decimal, orientation: Orientation, gps: LatLng, battery: int, sensors_ok: bool, current_state: int, state_complete: bool,
-                hiker_position: LatLng, status: int, propulsion: bool, geofence_compliant: bool):
+                hiker_position: LatLng, status: int, propulsion: bool, geofence_compliant: bool, manual_mode: bool):
         self.altitude = altitude
         self.speed = speed
         self.orientation = orientation
@@ -82,19 +82,20 @@ class ToGCS:
         self.status = status
         self.propulsion = propulsion
         self.geofence_compliant = geofence_compliant
+        self.manual_mode = manual_mode
 
         self.lock = Lock()
     
     def serialize(self):
-        header = struct.pack("8d?B?2dB2?", self.altitude, self.speed, self.orientation.pitch, self.orientation.roll, self.orientation.yaw, self.gps.lat,
+        header = struct.pack("8d?B?2dB3?", self.altitude, self.speed, self.orientation.pitch, self.orientation.roll, self.orientation.yaw, self.gps.lat,
                             self.gps.lng, self.battery, self.sensors_ok, self.current_state, self.state_complete, self.hiker_position.lat, self.hiker_position.lng,
-                            self.status, self.propulsion, self.geofence_compliant)
+                            self.status, self.propulsion, self.geofence_compliant, self.manual_mode)
         
         return Packet(header)
 
     @classmethod
     def deserialize(cls, data: bytearray):
-        raw = [*struct.unpack("8d?B?2dB2?", data)]
+        raw = [*struct.unpack("8d?B?2dB3?", data)]
         raw.insert(2, Orientation(raw.pop(2), raw.pop(2), raw.pop(2)))
         raw.insert(3, LatLng(raw.pop(3), raw.pop(3)))
         raw.insert(8, LatLng(raw.pop(8), raw.pop(8)))
@@ -197,9 +198,10 @@ class ToMAC:
 # ToERU
 class ToERU:
     def __init__(self, stop, perform_state: int, hiker_position: LatLng, geofence: list[Geofence], ez_zone: LatLng, travel_to: LatLng,
-                 execute_loading: bool, manual_control: ManualControl, armed: bool):
+                 execute_loading: bool, manual_control: ManualControl, armed: bool, requestData: bool):
         self.stop = stop
         self.perform_state = perform_state
+        self.requestData = requestData
         self.hiker_position = hiker_position
         self.geofence_length = len(geofence)
         self.geofence = geofence
@@ -216,9 +218,9 @@ class ToERU:
         self.lock = Lock()
 
     def serialize(self):
-        header = struct.pack("?B2dI4d3?", self.stop, self.perform_state, self.hiker_position.lat, self.hiker_position.lng, 
+        header = struct.pack("?B2dI4d4?", self.stop, self.perform_state, self.hiker_position.lat, self.hiker_position.lng, 
                             self.geofence_length, self.ez_zone.lat, self.ez_zone.lng, self.travel_to.lat, self.travel_to.lng, self.execute_loading, 
-                            self.manual_control, self.armed)
+                            self.manual_control, self.armed, self.requestData)
         body = bytearray()
         for geofence_obj in self.geofence:
             body += struct.pack("?B",geofence_obj.keep_in, geofence_obj.coord_length)
@@ -226,7 +228,8 @@ class ToERU:
                 body += struct.pack("2d", point.lat, point.lng)
         
         if self.manual_control:
-            body += struct.pack("5d", self.control_data.vertical, self.control_data.horizontal, self.control_data.arm, self.control_data.claw, self.control_data.speed)
+            body += struct.pack("2d4h2?", self.control_data.vertical, self.control_data.horizontal, self.control_data.armOne, self.control_data.armTwo, 
+                                self.control_data.armThree, self.control_data.armFour, self.control_data.vertical_direction, self.control_data.armFour_direction)
 
         header += body
 
@@ -236,7 +239,7 @@ class ToERU:
     def deserialize(cls, data: bytearray):
         header = data[:67]
         body = data[67:]
-        raw = [*struct.unpack("?B2dI4d3?", header)]
+        raw = [*struct.unpack("?B2dI4d4?", header)]
         raw.insert(2, LatLng(raw.pop(2), raw.pop(2)))
         raw.insert(4, LatLng(raw.pop(4), raw.pop(4)))
         raw.insert(5, LatLng(raw.pop(5), raw.pop(5)))
@@ -256,7 +259,7 @@ class ToERU:
 
         control_data = None
         if manual_control:
-            control_data = ManualControl(*struct.unpack("5d",body))
+            control_data = ManualControl(*struct.unpack("2d4h2?",body))
 
         raw.insert(6, control_data)
         raw.insert(3, geofence)
@@ -409,16 +412,22 @@ class Orientation():
 class ManualControl():
     vertical: decimal
     horizontal: decimal
-    arm: decimal
-    claw: decimal
-    speed: decimal
+    armOne: decimal
+    armTwo: decimal
+    armThree: decimal
+    armFour: decimal
+    vertical_direction: bool
+    armFour_direction: bool
 
-    def __init__(self, vertical, horizontal, arm, claw, speed):
+    def __init__(self, vertical, horizontal, armOne, armTwo, armThree, armFour, vertical_direction, armFour_direction):
         self.vertical = vertical
         self.horizontal = horizontal
-        self.arm = arm
-        self.claw = claw
-        self.speed = speed
+        self.armOne = armOne
+        self.armTwo = armTwo
+        self.armThree = armThree
+        self.armFour = armFour
+        self.vertical_direction = vertical_direction
+        self.armFour_direction = armFour_direction
 
     def __repr__(self):
         return str(self.__dict__)[1:-1]
@@ -429,21 +438,21 @@ orientation = Orientation(1,1,1)
 gps = LatLng(2,2.0005)
 hiker = LatLng(1.5, 1.5)
 
-togcs = ToGCS(1.5,10,orientation,gps,.9,True,3,False,hiker,1,True,True)
+togcs = ToGCS(1.5,10,orientation,gps,.9,True,3,False,hiker,1,True,True,False)
 
 geo_bounds = [Geofence(True, [LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])]
 geo_bounds.append(Geofence(False, [LatLng(1,1),LatLng(2,1),LatLng(2,-1),LatLng(1,-1)]))
 
 geo_empty = []
-mancon = ManualControl(.8,-.1,0,0,.8)
+mancon = ManualControl(.8,-.1,0,0,.8,0,False,False)
 
 area = SearchArea([LatLng(1,0),LatLng(0,1),LatLng(-1,0),LatLng(0,-1)])
 
 tomac = ToMAC(None, 1, LatLng(1,1), geo_bounds, [area], LatLng(.5,.5), LatLng(.6,0), False)
 tomac2 = ToMAC((2.2,3.3,500), 1, LatLng(1,1), geo_empty, [area,area], LatLng(.5,.5), LatLng(.6,0), False)
 
-toeru = ToERU(False, 1, LatLng(1,1), geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, mancon, True)
-toeru2 = ToERU(False, 1, LatLng(1,1), geo_empty, LatLng(5,5), LatLng(5.5,5.5), False, None, True)
+toeru = ToERU(False, 1, LatLng(1,1), geo_bounds, LatLng(5,5), LatLng(5.5,5.5), False, mancon, True, False)
+toeru2 = ToERU(False, 1, LatLng(1,1), geo_empty, LatLng(5,5), LatLng(5.5,5.5), False, None, True, False)
 
 tomea = ToMEA(None, 1, geo_empty, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
 tomea2 = ToMEA((5.5,5.5,1000), 1, geo_bounds, LatLng(6.5,7.5), LatLng(1.1,1.1), False, True)
