@@ -50,6 +50,7 @@ def publish(client):
                     return False
             with Listener(on_press=on_press, on_release=on_release) as listener:
                 listener.join()
+        #Will go thru a mode of looping message counts
         elif(sys.argv[1] == '1'):
             time.sleep(1)
             msg = f"messages: {msg_count}"
