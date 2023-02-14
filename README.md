@@ -5,7 +5,7 @@
 -
 
 ### Prerequisites:
-- Python 3.7 or greater installed
+- Python 3.7-3.10.6 (Python 3.11+ does not work)
 - Install pip(package installer for python)
   - [pip documentation click here](https://pip.pypa.io/en/stable/installation/)
 
