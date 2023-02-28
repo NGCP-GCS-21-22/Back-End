@@ -1,0 +1,50 @@
+{
+    "MAC": {
+    "1": {
+      "geofence": [
+        {
+          "coordinates": [
+            {
+              "lat": 30,
+              "lng": 25.5
+            },
+            {
+              "lat": 50.9,
+              "lng": 10.5
+            },
+            {
+              "lat": 20,
+              "lng": 30
+            },
+            {
+              "lat": 60,
+              "lng": 52.3
+            },
+            {
+              "lat": 71,
+              "lng": 40.12
+            }
+          ],
+          "keep_in": true
+        },
+        {
+          "coordinates": [
+            {
+              "lat": 40,
+              "lng": 35.5
+            },
+            {
+              "lat": 61.9,
+              "lng": 12.5
+            },
+            {
+              "lat": 30,
+              "lng": 56
+            }
+          ],
+          "keep_in": false
+        }
+      ]
+    }
+  }
+}
