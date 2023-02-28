@@ -380,11 +380,14 @@ if __name__ == '__main__':
 
     # create db.json file for storing geofence data
     db = TinyDB('geoDB.json')
+    MACdb = TinyDB('MAC.json')
+    ERUdb = TinyDB('ERU.json')
+    MEAdb = TinyDB('MEA.json')
 
     # create tables with specific name and initialize them
-    MACTable = db.table('MAC')
-    ERUTable = db.table('ERU')
-    MEATable = db.table('MEA')
+    MACTable = MACdb.table('MAC')
+    ERUTable = ERUdb.table('ERU')
+    MEATable = MEAdb.table('MEA')
     dropCoordinatesTable = db.table('drop_coordinates')
     evacuationCoordinatesTable = db.table('evacuation_coordinates')
     searchAreaTable = db.table('search_area_coordinates')
