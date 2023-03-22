@@ -1,0 +1,134 @@
+{
+  "searchArea" : [
+    {
+      "lat": 0.0,
+      "lng": 0.0
+    },
+    {
+      "lat": 0.0,
+      "lng": 0.0
+    },
+    {
+      "lat": 0.0,
+      "lng": 0.0
+    }
+  ],
+  "manualControl": {
+    "ERU": true,
+    "MEA": true,
+    "MAC": true
+  },
+  "missionWaypoints": {
+    "ERU": [
+      {
+        "id": 1,
+        "timeCreated": "10:00:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      },
+      {
+        "id": 2,
+        "timeCreated": "10:01:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      }
+    ],
+    "MEA": [
+      {
+        "id": 1,
+        "timeCreated": "10:00:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      },
+      {
+        "id": 2,
+        "timeCreated": "10:01:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      }
+    ],
+    "MAC": [
+      {
+        "id": 1,
+        "timeCreated": "10:00:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      },
+      {
+        "id": 2,
+        "timeCreated": "10:01:00",
+        "coordinates": {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      }
+    ]
+  },
+  "currentStageId": {
+    "ERU": 1,
+    "MEA": 1,
+    "MAC": 1
+  },
+  "homeCoordinates": {
+    "ERU": {
+      "lat": 0.0,
+      "lng": 0.0
+    },
+    "MEA": {
+      "lat": 0.0,
+      "lng": 0.0
+    },
+    "MAC": {
+      "lat": 0.0,
+      "lng": 0.0
+    }
+  },
+  "geofenceKeepIn": [
+    {
+      "id": 1,
+      "timeCreated": "10:00:00",
+      "coordinates": [
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        },
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        },
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "timeCreated": "10:01:43",
+      "coordinates": [
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        },
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        },
+        {
+          "lat": 0.0,
+          "lng": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -379,10 +379,10 @@ if __name__ == '__main__':
 
 
     # create db.json file for storing geofence data
-    db = TinyDB('./geoDB/coordinates.json')
-    MACdb = TinyDB('./geoDB/MAC.json')
-    ERUdb = TinyDB('./geoDB/ERU.json')
-    MEAdb = TinyDB('./geoDB/MEA.json')
+    db = TinyDB('./database/general.json')
+    MACdb = TinyDB('./database/MAC.json')
+    ERUdb = TinyDB('./database/ERU.json')
+    MEAdb = TinyDB('./database/MEA.json')
 
     # create tables with specific name and initialize them
     MACTable = MACdb.table('MAC')
