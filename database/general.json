@@ -17,7 +17,6 @@
   },
   "geofence": {
     "1": {
-      "id": 1,
       "timeCreated": "10:00:00",
       "isKeepIn": true,
       "coordinates": [
@@ -58,7 +57,7 @@
     "1": {
       "vehicle": "MAC",
       "currentStageId": 1,
-      "manualMode": false,
+      "manualMode": true,
       "homeCoordinates": {
         "lat": 0.0,
         "lng": 0.0

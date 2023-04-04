@@ -58,29 +58,28 @@ query = Query()
 
 # ************************ API ENDPOINTS ************************ #
 
-# Manual override all vehicles
+# Manual override all vehicles by changing `manualMode` to true
 @app.route("/api/manualOverride", methods=['POST'])
 def manual_override_all() -> Response:
-    # Update the manual control for each vehicle
-    for key in TABLES["vehicles"].keys():
-        TABLES['vehicles'][key].update({"manualMode": True})
+    # Update the manual control for all vehicle
+    TABLES['general'].update({"manualMode": True})
     # Return a success message
     return jsonify({"update": "success!"})
 
 
-# Manual override specific vehicles
+# Manual override specific vehicles by changing `manualMode` to true
 @app.route("/api/manualOverride/<vehicle>", methods=['GET', 'POST'])
 def manual_override_vehicle(vehicle: str) -> Response:
     if request.method == 'GET':
         # TinyDB search() returns an list, so we have to extract the final dict
-        vehicleObject = TABLES["vehicles"][vehicle].search(query.vehicle == vehicle)[0]
+        vehicleObject = TABLES["general"].search(query.vehicle == vehicle)[0]
         return jsonify({
             "vehicle": vehicle,
             "manualMode": vehicleObject['manualMode']
         })
   
     if request.method == 'POST':
-        TABLES[vehicle].update({"manualMode": True}, query.vehicle == vehicle)
+        TABLES["general"].update({"manualMode": True}, query.vehicle == vehicle)
         return jsonify({"update": "success!"})
 
 
