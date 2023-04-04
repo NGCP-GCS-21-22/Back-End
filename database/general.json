@@ -1,102 +1,24 @@
 {
-  "searchArea" : [
-    {
-      "lat": 0.0,
-      "lng": 0.0
-    },
-    {
-      "lat": 0.0,
-      "lng": 0.0
-    },
-    {
-      "lat": 0.0,
-      "lng": 0.0
-    }
-  ],
-  "manualControl": {
-    "ERU": true,
-    "MEA": true,
-    "MAC": true
-  },
-  "missionWaypoints": {
-    "ERU": [
+  "searchArea": {
+    "1": [
       {
-        "id": 1,
-        "timeCreated": "10:00:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
+        "lat": 0.0,
+        "lng": 0.0
       },
       {
-        "id": 2,
-        "timeCreated": "10:01:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
-      }
-    ],
-    "MEA": [
-      {
-        "id": 1,
-        "timeCreated": "10:00:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
+        "lat": 0.0,
+        "lng": 0.0
       },
       {
-        "id": 2,
-        "timeCreated": "10:01:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
-      }
-    ],
-    "MAC": [
-      {
-        "id": 1,
-        "timeCreated": "10:00:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
-      },
-      {
-        "id": 2,
-        "timeCreated": "10:01:00",
-        "coordinates": {
-          "lat": 0.0,
-          "lng": 0.0
-        }
+        "lat": 0.0,
+        "lng": 0.0
       }
     ]
   },
-  "currentStageId": {
-    "ERU": 1,
-    "MEA": 1,
-    "MAC": 1
-  },
-  "homeCoordinates": {
-    "ERU": {
-      "lat": 0.0,
-      "lng": 0.0
-    },
-    "MEA": {
-      "lat": 0.0,
-      "lng": 0.0
-    },
-    "MAC": {
-      "lat": 0.0,
-      "lng": 0.0
-    }
-  },
-  "geofenceKeepIn": [
-    {
-      "id": 1,
+  "geofence": {
+    "1": {
       "timeCreated": "10:00:00",
+      "isKeepIn": true,
       "coordinates": [
         {
           "lat": 0.0,
@@ -112,9 +34,9 @@
         }
       ]
     },
-    {
-      "id": 2,
+    "2": {
       "timeCreated": "10:01:43",
+      "isKeepIn": false,
       "coordinates": [
         {
           "lat": 0.0,
@@ -130,5 +52,86 @@
         }
       ]
     }
-  ]
+  },
+  "vehicleGeneral": {
+    "1": {
+      "vehicle": "MAC",
+      "currentStageId": 1,
+      "manualMode": true,
+      "homeCoordinates": {
+        "lat": 0.0,
+        "lng": 0.0
+      },
+      "missionWayPoints": [
+        {
+          "timeCreated": "10:00:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        },
+        {
+          "timeCreated": "10:01:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        }
+      ]
+    },
+    "2": {
+      "vehicle": "MEA",
+      "currentStageId": 1,
+      "manualMode": true,
+      "homeCoordinates": {
+        "lat": 0.0,
+        "lng": 0.0
+      },
+      "missionWayPoints": [
+        {
+          "id": 1,
+          "timeCreated": "10:00:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        },
+        {
+          "id": 2,
+          "timeCreated": "10:01:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        }
+      ]
+    },
+    "3": {
+      "vehicle": "ERU",
+      "currentStageId": 2,
+      "manualMode": true,
+      "homeCoordinates": {
+        "lat": 0.0,
+        "lng": 0.0
+      },
+      "missionWayPoints": [
+        {
+          "id": 1,
+          "timeCreated": "10:00:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        },
+        {
+          "id": 2,
+          "timeCreated": "10:01:00",
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          }
+        }
+      ]
+    }
+  }
 }
