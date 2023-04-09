@@ -48,7 +48,7 @@ TABLES = {
       "ERU": ERUdb.table('vehicleData'),
     },
     "general": GeneralDB.table('vehicleGeneral'),
-    "geofenceKeepIn": GeneralDB.table('geofenceKeepIn'),
+    "geofence": GeneralDB.table('geofence'),
     "searchArea": GeneralDB.table('searchArea')
 }
 
@@ -147,6 +147,67 @@ def vehicle_data(vehicle: str) -> Response:
             "vehicle": vehicle,
             "dataUpdated": response_body
         })
+
+
+# Get and Post GeoFence endpoint
+@app.route('/api/geofence', methods=['GET','POST'])
+def geofence():
+    # GET geofence
+    if request.method == 'GET':
+        # Get all geofence data
+        geofence_data = TABLES['geofence'].all()
+
+        # Return geofence data
+        return jsonify(geofence_data)
+    
+    # POST geofence
+    if request.method == 'POST':
+        required_fields = set(['coordinates','timeCreated','isKeepIn'])
+      
+        request_body = request.get_json(force=True)
+        
+        # Validate geofence object
+        if not request_body:
+            return jsonify({"error": "No data provided"}), 400
+
+        # Get the request body
+        geofence = request_body
+
+        # Validate POST request general format
+        if not geofence:
+            return jsonify({"error": "No geofence data provided"}), 400
+        if not isinstance(geofence, dict):
+            return jsonify({"error": "Invalid geofence data format"}), 400
+        
+        for key, value in geofence.items():
+            
+            # Make sure the request has all required fields
+            if key not in required_fields:
+                return jsonify({"error": "Geofence data missing {} field".format(key)}), 400
+            
+            # Validate timeCreated format
+            if key == "timeCreated":
+                try:
+                    datetime.strptime(value, '%H:%M:%S')
+                except ValueError:
+                    return jsonify({"error": "Invalid timeCreated format. Must be in HH:MM:SS format"}), 400
+            
+            # Validate coordinates format
+            if key == "coordinates":
+                coords = value 
+                if not isinstance(coords, list) or len(coords) < 3:
+                    return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
+                for coord in coords:
+                    if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
+                        return jsonify({"error": "Invalid geofence coordinates format"}), 400
+
+        #Add data to database
+        TABLES['geofence'].insert(geofence)
+        
+        return jsonify({
+            "update": "success!",
+            "dataUpdated": geofence
+        }), 200
 
 
 
