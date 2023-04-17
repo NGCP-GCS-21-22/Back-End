@@ -151,7 +151,7 @@ def vehicle_data(vehicle: str) -> Response:
 
 # Get and Post GeoFence endpoint
 @app.route('/api/geofence', methods=['GET','POST'])
-def geofence():
+def geofence() -> Response:
     # GET geofence
     if request.method == 'GET':
         # Get all geofence data
@@ -179,11 +179,15 @@ def geofence():
         if not isinstance(geofence, dict):
             return jsonify({"error": "Invalid geofence data format"}), 400
         
+        # Make sure the request has all required fields  
+        if set(geofence.keys()) != required_fields:
+            return jsonify({"error": "Invalid geofence data fields. Required fields are {}".format(required_fields)}), 400
+        
         for key, value in geofence.items():
-            
-            # Make sure the request has all required fields
-            if key not in required_fields:
-                return jsonify({"error": "Geofence data missing {} field".format(key)}), 400
+            # Validate isKeepIn format
+            if key == "isKeepIn":
+                if not isinstance(value, bool):
+                    return jsonify({"error": "isKeepIn value must be a boolean."}), 400
             
             # Validate timeCreated format
             if key == "timeCreated":
@@ -195,11 +199,17 @@ def geofence():
             # Validate coordinates format
             if key == "coordinates":
                 coords = value 
+                # Check for minimum number of coordinates and list format
                 if not isinstance(coords, list) or len(coords) < 3:
                     return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
+                
                 for coord in coords:
+                    # Check format of each coordinate sets
                     if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
                         return jsonify({"error": "Invalid geofence coordinates format"}), 400
+                    # Validate latitude and longitude
+                    if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
+                        return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
 
         #Add data to database
         TABLES['geofence'].insert(geofence)
