@@ -198,18 +198,19 @@ def geofence() -> Response:
             
             # Validate coordinates format
             if key == "coordinates":
-                coords = value 
-                # Check for minimum number of coordinates and list format
-                if not isinstance(coords, list) or len(coords) < 3:
-                    return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
+                validateCoords(value)
+                # coords = value 
+                # # Check for minimum number of coordinates and list format
+                # if not isinstance(coords, list) or len(coords) < 3:
+                #     return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
                 
-                for coord in coords:
-                    # Check format of each coordinate sets
-                    if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
-                        return jsonify({"error": "Invalid geofence coordinates format"}), 400
-                    # Validate latitude and longitude
-                    if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
-                        return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
+                # for coord in coords:
+                #     # Check format of each coordinate sets
+                #     if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
+                #         return jsonify({"error": "Invalid geofence coordinates format"}), 400
+                #     # Validate latitude and longitude
+                #     if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
+                #         return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
 
         #Add data to database
         TABLES['geofence'].insert(geofence)
@@ -219,8 +220,53 @@ def geofence() -> Response:
             "dataUpdated": geofence
         }), 200
 
+# Get and Post Search Area
+@app.route('/api/searchArea', methods = ['GET', 'POST'])
+def searchArea():
+    # Get searchArea
+    if request.method == 'GET':
+        searchArea_data = TABLES['searchArea'].all()
 
+        return jsonify(searchArea_data)
 
+    # Post searchArea
+    if request.method == 'POST':
+        required_fields = 'coordinates'
+        request_body = request.get_json(force=True)
+
+        # Verify only one response body is passed in
+        if len(request_body.keys()) != 1:
+            return jsonify({"error": "Please enter a valid response body for this request"}), 400
+
+        # Validate coordinates format
+        key = next(iter(request_body.keys()))
+        if key == "coordinates":
+            validateCoords(request_body[key])
+                
+        #Update searchArea in database
+        TABLES["searchArea"].update({key: request_body[key]})
+
+    
+    # Return a successful response
+    return jsonify({
+        "update": "success!",
+        "dataUpdated": request_body
+    })
+
+# Validate coordinates for search area and geofence
+def validateCoords(value):
+    coords = value 
+    # Check for minimum number of coordinates and list format
+    if not isinstance(coords, list) or len(coords) < 3:
+        return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
+    
+    for coord in coords:
+        # Check format of each coordinate sets
+        if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
+            return jsonify({"error": "Invalid geofence coordinates format"}), 400
+        # Validate latitude and longitude
+        if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
+            return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
 
 
 if __name__ == '__main__':
