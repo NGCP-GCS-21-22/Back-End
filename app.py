@@ -224,7 +224,7 @@ def geofence() -> Response:
 def searchArea():
     # Get searchArea
     if request.method == 'GET':
-        searchArea_data = TABLES['searchArea'].all()
+        searchArea_data = TABLES['searchArea'].all()[0]
 
         return jsonify(searchArea_data)
 
@@ -243,15 +243,15 @@ def searchArea():
             coords = request_body[key] 
             # Check for minimum number of coordinates and list format
             if not isinstance(coords, list) or len(coords) < 3:
-                return jsonify({"error": "Geofence data coordinates must be a list of at least 3 coordinates"}), 400
+                return jsonify({"error": "Search Area data coordinates must be a list of at least 3 coordinates"}), 400
             
             for coord in coords:
                 # Check format of each coordinate sets
                 if not isinstance(coord, dict) or 'lat' not in coord or 'lng' not in coord:
-                    return jsonify({"error": "Invalid geofence coordinates format"}), 400
+                    return jsonify({"error": "Invalid search area coordinates format"}), 400
                 # Validate latitude and longitude
                 if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
-                    return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
+                    return jsonify({"error": "Invalid search area coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
                 
         #Update searchArea in database
         TABLES["searchArea"].update({key: request_body[key]})
