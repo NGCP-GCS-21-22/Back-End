@@ -1,0 +1,65 @@
+{
+  "MAC": {
+    "1": {
+      "id": 1,
+      "name": "Ready to Start"
+    },
+    "2": {
+      "id": 2,
+      "name": "Drop Relief Package"
+    },
+    "3": {
+      "id": 3,
+      "name": "Loitering"
+    }
+  },
+  "MEA": {
+    "1": {
+      "id": 1,
+      "name": "Deploy Fire Suppressant"
+    },
+    "2": {
+      "id": 2,
+      "name": "Retrieve Hiker"
+    },
+    "3": {
+      "id": 3,
+      "name": "Transport Hiker"
+    },
+    "4": {
+      "id": 4,
+      "name": "Lower Hiker"
+    },
+    "5": {
+      "id": 5,
+      "name": "Retrieve Payload"
+    },
+    "6": {
+      "id": 6,
+      "name": "Loitering"
+    }
+  },
+  "ERU": {
+    "1": {
+      "id": 1,
+      "name": "Recover Relief Package"
+    },
+    "2": {
+      "id": 2,
+      "name": "Transporting Relief Package"
+    },
+    "3": {
+      "id": 3,
+      "name": "Prepare Hiker for Transport"
+    },
+    "4": {
+      "id": 4,
+      "name": "Transfer Hiker"
+    },
+    "5": {
+      "id": 5,
+      "name": "Emergency Stop"
+    }
+  }
+}
+

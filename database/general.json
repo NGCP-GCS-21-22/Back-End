@@ -1,18 +1,36 @@
 {
-  "searchArea": {
+  "geofenceSpecial": {
     "1": {
+      "type": "searchArea",
       "coordinates": [
         {
-          "lat": 0.0,
-          "lng": 0.0
+          "lat": 0,
+          "lng": 0
         },
         {
-          "lat": 0.0,
-          "lng": 0.0
+          "lat": 0,
+          "lng": 0
         },
         {
-          "lat": 0.0,
-          "lng": 0.0
+          "lat": 0,
+          "lng": 0
+        }
+      ]
+    },
+    "2": {
+      "type": "fireLocation",
+      "coordinates": [
+        {
+          "lat": 0,
+          "lng": 0
+        },
+        {
+          "lat": 0,
+          "lng": 0
+        },
+        {
+          "lat": 0,
+          "lng": 0
         }
       ]
     }
@@ -54,24 +72,6 @@
         }
       ]
     },
-    "3": {
-      "timeCreated": "20:00:00",
-      "isKeepIn": false,
-      "coordinates": [
-        {
-          "lat": 99.0,
-          "lng": 0.0
-        },
-        {
-          "lat": 9.0,
-          "lng": 0.0
-        },
-        {
-          "lat": 99.0,
-          "lng": 0.0
-        }
-      ]
-    },
     "4": {
       "timeCreated": "20:00:00",
       "isKeepIn": true,
@@ -89,6 +89,24 @@
           "lng": 180.0
         }
       ]
+    },
+    "5": {
+      "timeCreated": "13:00:00",
+      "isKeepIn": false,
+      "coordinates": [
+        {
+          "lat": 23,
+          "lng": 64
+        },
+        {
+          "lat": -78,
+          "lng": -50
+        },
+        {
+          "lat": 23,
+          "lng": -49
+        }
+      ]
     }
   },
   "vehicleGeneral": {
@@ -100,7 +118,7 @@
         "lat": 0.0,
         "lng": 0.0
       },
-      "missionWayPoints": [
+      "missionWaypoints": [
         {
           "timeCreated": "10:00:00",
           "coordinates": {
@@ -114,6 +132,13 @@
             "lat": 0.0,
             "lng": 0.0
           }
+        },
+        {
+          "coordinates": {
+            "lat": 0.0,
+            "lng": 0.0
+          },
+          "timeCreated": "09:00:00"
         }
       ]
     },
@@ -125,9 +150,8 @@
         "lat": 0.0,
         "lng": 0.0
       },
-      "missionWayPoints": [
+      "missionWaypoints": [
         {
-          "id": 1,
           "timeCreated": "10:00:00",
           "coordinates": {
             "lat": 0.0,
@@ -135,7 +159,6 @@
           }
         },
         {
-          "id": 2,
           "timeCreated": "10:01:00",
           "coordinates": {
             "lat": 0.0,
@@ -152,9 +175,8 @@
         "lat": 0.0,
         "lng": 0.0
       },
-      "missionWayPoints": [
+      "missionWaypoints": [
         {
-          "id": 1,
           "timeCreated": "10:00:00",
           "coordinates": {
             "lat": 0.0,
@@ -162,7 +184,6 @@
           }
         },
         {
-          "id": 2,
           "timeCreated": "10:01:00",
           "coordinates": {
             "lat": 0.0,

@@ -8,6 +8,9 @@ from datetime import datetime
 from mission import *
 from urllib import response
 from tinydb import TinyDB, Query
+from tinydb.table import Table
+from tinydb.operations import add
+import socket
 import json
 import multiprocessing
 from multiprocessing.sharedctypes import Value, Array
@@ -35,6 +38,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Extract TinyDB objects from the JSON files
 GeneralDB = TinyDB('./database/general.json', indent=2)
+MissionDB = TinyDB('./database/mission.json', indent=2)
 MACdb = TinyDB('./database/MAC.json', indent=2)
 ERUdb = TinyDB('./database/ERU.json', indent=2)
 MEAdb = TinyDB('./database/MEA.json', indent=2)
@@ -43,20 +47,87 @@ MEAdb = TinyDB('./database/MEA.json', indent=2)
 # Create tables with specific name and initialize them
 TABLES = {
     "vehicles": {
-      "MAC": MACdb.table('vehicleData'),
-      "MEA": MEAdb.table('vehicleData'),
-      "ERU": ERUdb.table('vehicleData'),
+        "MAC": MACdb.table('vehicleData'),
+        "MEA": MEAdb.table('vehicleData'),
+        "ERU": ERUdb.table('vehicleData'),
+    },
+    "missionStages": {
+        "MAC": MissionDB.table('MAC'),
+        "MEA": MissionDB.table('MEA'),
+        "ERU": MissionDB.table('ERU')
     },
     "general": GeneralDB.table('vehicleGeneral'),
     "geofence": GeneralDB.table('geofence'),
-    "searchArea": GeneralDB.table('searchArea')
+    "geofenceSpecial": GeneralDB.table('geofenceSpecial')
 }
+
+SPECIAL_GEOFENCE = {'fireLocation', 'searchArea'}
 
 # create an instance of Query class that can help us search the database
 query = Query()
 
 
+
+
+
+
 # ************************ API ENDPOINTS ************************ #
+
+# Get data from the vehicles
+@app.route("/api/vehicleData/<vehicle>", methods=['GET', 'POST'])
+def vehicleData(vehicle: str) -> Response:
+    # Only use `frontend` or `vehicles` device types for this query string
+    db_type = request.args.get('db_type')
+
+    if request.method == 'GET':
+        # Retrieve vehicle data from vehicles JSON
+        if db_type == 'vehicles':
+            vehicle_body = TABLES["vehicles"][vehicle].all()[0]
+            return jsonify(vehicle_body)
+          
+        # Retrieve vehicle data from general JSON
+        if db_type == 'general':
+            vehicle_general = TABLES["general"].search(query.vehicle == vehicle)[0]
+            return jsonify(vehicle_general)
+
+        vehicle_body = TABLES["vehicles"][vehicle].all()[0]
+        vehicle_general = TABLES["general"].search(query.vehicle == vehicle)[0]
+        
+        for key, value in vehicle_general.items():
+            vehicle_body[key] = value
+        
+        # Merge the two together
+        return jsonify(vehicle_body)
+    
+    
+    if request.method == 'POST':
+        # Retrieve request body
+        request_body: dict = request.get_json(force=True)
+        response_body = dict()
+        # Get db options & error handling
+        
+        if db_type not in ["general", "vehicles"]:
+            return jsonify({"error": "That was not a valid query string. Use either `general` or `vehicles` for query `db_type` only."}), 400
+        if len(request_body.keys()) == 0:
+            return jsonify({"error": "Please enter a response body for this request"}), 400
+        
+        # Loop over all given keys in the request body
+        for key, value in request_body.items():
+            # Update the general JSON if the `db_type` is 'general'
+            if db_type == 'frontend':
+                TABLES["general"].update({key: value}, query.vehicle == vehicle)
+            # Update the respective vehicle JSON if the `db_type` is 'vehicles'
+            if db_type == 'vehicles':
+                TABLES["vehicles"][vehicle].update({key: value})
+            response_body[key] = value
+        
+        # Return a successful response
+        return jsonify({
+            "update": "success!",
+            "vehicle": vehicle,
+            "dataUpdated": response_body
+        })
+
 
 # Manual override all vehicles by changing `manualMode` to true
 @app.route("/api/manualOverride", methods=['POST'])
@@ -83,71 +154,6 @@ def manual_override_vehicle(vehicle: str) -> Response:
         return jsonify({"update": "success!"})
 
 
-# Post data to all vehicles (only general.json)
-@app.route("/api/vehicleData", methods=['POST'])
-def post_all_vehicle_data():
-    # Retrieve request body
-    request_body, response_body = request.get_json(force=True), {}
-    
-    # Basic error handling
-    if len(request_body.keys()) == 0:
-        return jsonify({"error": "Please enter a response body for this request"}), 400
-    
-    # Update data for all vehicles (general.json only)
-    for key in request_body.keys():
-        TABLES["general"].update({key: request_body[key]})
-        response_body[key] = request_body[key]
-    
-    # Return a successful response
-    return jsonify({
-        "update": "success!",
-        "dataUpdated": response_body
-    })
-
-
-# Get data from the vehicles
-@app.route("/api/vehicleData/<vehicle>", methods=['GET', 'POST'])
-def vehicle_data(vehicle: str) -> Response:
-    if request.method == 'GET':
-        # Retrieve data from vehicles JSON
-        response_body = TABLES["vehicles"][vehicle].all()[0]
-        # Retrieve vehicle data from general JSON
-        vehicle_general = TABLES["general"].search(query.vehicle == vehicle)[0]
-        # Merge the two together
-        for key in vehicle_general.keys():
-            response_body[key] = vehicle_general[key] 
-        return jsonify(response_body)
-    
-    
-    if request.method == 'POST':
-        # Retrieve request body
-        request_body, response_body = request.get_json(force=True), {}
-        
-        # Get db options & error handling
-        # Only use `general` or `vehicles` for this query string
-        db_type = request.args.get('db_type')
-        if db_type not in ["general", "vehicles"]:
-            return jsonify({"error": "That was not a valid query string. Use either `general` or `vehicles` for query `db_type` only."}), 400
-        if len(request_body.keys()) == 0:
-            return jsonify({"error": "Please enter a response body for this request"}), 400
-        
-        # Loop over all given keys in the request body
-        for key in request_body.keys():
-            # Update the general JSON if the `db_type` is 'general'
-            if db_type == 'general':
-                TABLES["general"].update({key: request_body[key]}, query.vehicle == vehicle)
-            # Update the respective vehicle JSON if the `db_type` is 'vehicles'
-            if db_type == 'vehicles':
-                TABLES["vehicles"][vehicle]({key: request_body[key]})
-            response_body[key] = request_body[key]
-        
-        # Return a successful response
-        return jsonify({
-            "update": "success!",
-            "vehicle": vehicle,
-            "dataUpdated": response_body
-        })
-
 
 # Get and Post GeoFence endpoint
 @app.route('/api/geofence', methods=['GET','POST'])
@@ -162,7 +168,7 @@ def geofence() -> Response:
     
     # POST geofence
     if request.method == 'POST':
-        required_fields = set(['coordinates','timeCreated','isKeepIn'])
+        required_fields = {'coordinates','timeCreated','isKeepIn'}
       
         request_body = request.get_json(force=True)
         
@@ -211,7 +217,7 @@ def geofence() -> Response:
                     if not (-90 <= coord['lat'] <= 90 and -180 <= coord['lng'] <= 180):
                         return jsonify({"error": "Invalid geofence coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
 
-        #Add data to database
+        # Add data to database
         TABLES['geofence'].insert(geofence)
         
         return jsonify({
@@ -219,18 +225,21 @@ def geofence() -> Response:
             "dataUpdated": geofence
         }), 200
 
-# Get and Post Search Area
-@app.route('/api/searchArea', methods = ['GET', 'POST'])
-def searchArea():
+
+# Get and Post endpoints for Search Area or Fire Location
+@app.route('/api/geofenceSpecial/<type>', methods=['GET', 'POST'])
+def searchArea(type: str) -> Response:
+    if type not in SPECIAL_GEOFENCE:
+        return jsonify({'error': f'Given special geofence type must belong in {SPECIAL_GEOFENCE}'}), 400
+  
     # Get searchArea
     if request.method == 'GET':
-        searchArea_data = TABLES['searchArea'].all()[0]
+        searchArea_data = TABLES['geofenceSpecial'].search(query.type == type)[0]
 
         return jsonify(searchArea_data)
 
     # Post searchArea
     if request.method == 'POST':
-        required_fields = 'coordinates'
         request_body = request.get_json(force=True)
 
         # Verify only one response body is passed in
@@ -254,7 +263,7 @@ def searchArea():
                     return jsonify({"error": "Invalid search area coordinates range latitude:[-90,90] and longitude:[-180,180]"}), 400
                 
         #Update searchArea in database
-        TABLES["searchArea"].update({key: request_body[key]})
+        TABLES["searchArea"].update({key: request_body[key]}, query.type == type)
 
     
     # Return a successful response
@@ -263,193 +272,101 @@ def searchArea():
         "dataUpdated": request_body
     })
 
+
+# Get the predefined mission stages for each vehicle, as well as their associated ID
+@app.route('/api/missionStages/<vehicle>', methods=['GET'])
+def mission_stages(vehicle: str) -> Response:
+    if request.method == 'GET':
+        stage_id = request.args.get('id')
+        
+        if stage_id:
+          mission_stage = TABLES['missionStages'][vehicle].search(query.id == int(stage_id))
+          return jsonify(mission_stage[0])
+        else:
+          mission_stage = TABLES['missionStages'][vehicle].all()
+          return jsonify(mission_stage)
+
+
+# Get & update the current stage ID for each vehicle
+@app.route('/api/currentStage/<vehicle>', methods=['GET', 'POST'])
+def current_stage(vehicle: str) -> Response:
+    if request.method == 'GET':
+        response_fields = {'vehicle', 'currentStageId'}
+
+        
+        vehicle_general = TABLES["general"].search(query.vehicle == vehicle)[0]
+        return jsonify({key:vehicle_general[key] for key in response_fields})
+    
+    
+    if request.method == 'POST':
+        request_body: dict = request.get_json(force=True)
+        
+        # Validate whether the indicated mission stage ID actually exists for said vehicle
+        try:
+            mission_stage = TABLES['missionStages'][vehicle] \
+                .search(query.id == request_body["currentStageId"])[0]
+        except IndexError:
+            return jsonify(
+              {"error": f"The requested stage ID does not exists for vehicle `{vehicle}`"}
+            ), 400
+        
+        # Update the stage ID for the indicated vehicle
+        TABLES['general'].update(request_body, query.vehicle == vehicle)
+        
+        # Respond with a success message
+        return jsonify({
+          "update": "success!",
+          "dataUpdated": {
+            "vehicle": vehicle,
+            "stageId": mission_stage['id'],
+            "stageName": mission_stage['name']
+          }
+        })
+
+
+# Retrieve & update the mission waypoint for each vehicle
+@app.route('/api/missionWaypoint/<vehicle>', methods=['GET', 'POST', 'DELETE'])
+def mission_waypoints(vehicle: str) -> Response:
+    if request.method == 'GET':
+        vehicle_general = TABLES['general'].search(query.vehicle == vehicle)[0]
+        
+        # Sort the waypoints by time created
+        vehicle_waypoint_chronological = sorted(
+          vehicle_general["missionWaypoints"],
+          key=(lambda waypoint: waypoint['timeCreated'])
+        )
+        
+        return jsonify({
+          "vehicle": vehicle_general["vehicle"],
+          "missionWaypoints": vehicle_waypoint_chronological
+        })
+    
+    
+    if request.method == 'POST':
+          request_body: dict = request.get_json(force=True)
+        
+          # Add new waypoint to the mission waypoints array for the specified vehicle
+          TABLES['general'].update(add('missionWaypoints', [request_body]), query.vehicle == vehicle)
+        
+          return jsonify({
+              "update": "success!",
+              "dataUpdated": {
+                  "vehicle": vehicle,
+                  "waypoint": request_body 
+              }
+          })
+        
+    
+    if request.method == 'DELETE':
+        # Delete all waypoints for the specified vehicles
+        TABLES["general"].update({'missionWaypoints': []}, query.vehicle == vehicle)
+        
+        return jsonify({"update": "success!"})
+
+
+
+
 if __name__ == '__main__':
-    #============= Shared Memory ===============#
-
-    controller_data = Array('i', [0] * 8)
-    controller_process = multiprocessing.Process(
-      target=Controller.run_controller,
-      args = (False, controller_data)
-    )
-    controller_process.start()
-    
-    #============== App =======================#
-
-    # Comment out for testing for frontend
-    manager = multiprocessing.Manager()
-    # xbee_data = manager.list([0]*17)
-    # xbee_send_data = manager.list([0]*10)
-    send_flag = Value('B', 0)
-    receive_flag = Value('B', 0)
-    vehicleName = manager.Value(c_char_p, "ERU")
-
-    # xbee_process = multiprocessing.Process(target=Xbee.xbee_run, 
-    #                                        args = (xbee_data, send_flag, receive_flag, vehicleName, 
-    #                                                xbee_send_data, controller_data))
-    # xbee_process.start()
-    #print(xbee_data[:])
-    
-    # vehicleName.value = "ERU"
-    # while True:
-    #     print(controller_data[:])
-    #     print(xbee_data[:])
-    #     time.sleep(2)
-    #     send_flag.value = 1
-    #     print(send_flag.value)
-# Comment out for testing for frontend
-
-
-
-    #============== App =======================#
-
-
-
-    # Comment out for testing for frontend
-    # sampleGCS = getPacket()
-    # sampleGCS.initialize_comms()
-    # sampleGCS.start_receiving()
-    #sampleGCS.getPacket.start_receiving()
-
-        #print("Axis: " + str(controller_data[0]))
-        #print()
-
-
-# # Update the database with new entries
-# @app.route("/sendData", methods = ["POST"])
-# def sendData():
-#     if(request.method == "POST"):
-#         # Object from comm
-#         requestData = request.get_json()
-
-#         # Initialize the requested vehicle name
-#         vehicleName = requestData['vehicle_name']
-#         #newTime = requestData['time']
-
-#         # Initialize the vehicle datapoints
-#         altitude = requestData['altitude']
-#         #altitudeColor = requestData ['altitude_color']
-#         battery = requestData['battery']
-#         #batteryColor = requestData['battery_color']
-#         currentStage = requestData['current_stage']
-#         geofenceCompilant = requestData['geofence_compliant']
-#         bool(geofenceCompilant)
-#         #geofenceCompilantColor = requestData['geofence_compliant_color']
-#         latitude = requestData['latitude']
-#         longitude = requestData['longitude']
-#         pitch = requestData['pitch']
-#         #pitchColor = requestData['pitch_color']
-#         propulsion = requestData['propulsion']
-#         roll = requestData['roll']
-#         #rollColor = requestData['roll_color']
-#         sensorsOk = requestData['sensors_ok']
-#         speed = requestData['speed']
-#         stageComplete = requestData['stage_completed']
-#         status = requestData['status']
-#         yaw = requestData['yaw']
-#         timeSinceLastPacket = requestData['time_since_last_packet']
-#         lastPacketTime = requestData['last_packet_time']
-#         time = requestData['time']
-
-#         # Gets the stage name of the sent stage id
-#         stageName = updateStage.updateStageName(currentStage)
-
-#         # Update the vehicle dictionary with given values
-#         requestedVehicle = updateVehicle.newAltitude(altitude)
-#         #requestedVehicle = updateVehicle.newAltitudeColor(altitudeColor)
-#         requestedVehicle = updateVehicle.newBattery(battery)
-#         #requestedVehicle = updateVehicle.newBatteryColor(batteryColor)
-#         requestedVehicle = updateVehicle.newCurrentStage(currentStage)
-#         requestedVehicle = updateVehicle.newGeofenceCompilant(geofenceCompilant)
-#         #requestedVehicle = updateVehicle.newGeofenceCompilantColor(geofenceCompilantColor)
-#         requestedVehicle = updateVehicle.newLatitude(latitude)
-#         requestedVehicle = updateVehicle.newLongitude(longitude)
-#         requestedVehicle = updateVehicle.newPitch(pitch)
-#         #requestedVehicle = updateVehicle.newPitchColor(pitchColor)
-#         requestedVehicle = updateVehicle.newPropulsion(propulsion)
-#         requestedVehicle = updateVehicle.newRoll(roll)
-#         #requestedVehicle = updateVehicle.newRollColor(rollColor)
-#         requestedVehicle = updateVehicle.newSensorsOk(sensorsOk)
-#         requestedVehicle = updateVehicle.newSpeed(speed)
-#         requestedVehicle = updateVehicle.newStageCompleted(stageComplete)
-#         requestedVehicle = updateVehicle.newStatus(status)
-#         requestedVehicle = updateVehicle.newYaw(yaw)
-#         requestedVehicle = updateVehicle.newTimeSinceLastPacket(timeSinceLastPacket)
-#         requestedVehicle = updateVehicle.newLastPacketTime(lastPacketTime)
-#         requestedVehicle = updateVehicle.newTime(time)
-#         requestedVehicle = updateVehicle.newStageName(stageName)
-
-#         # Save the vehicle dictionary into SQLite Database
-#         vehicleDatabase.saveData(requestedVehicle, vehicleName)
-
-
-#         # TEST: show that the vehicle dictionary has been saved correctly
-#         return geofenceCompilant
-#         #return '''The value is: {}'''.format(requestedVehicle)
-
-# Sends back the latest entry from requested vehicle
-# @app.route("/postData", methods = ["POST"])
-# def postData():
-
-#     if(request.method == "POST"):
-#         # JSON Format from frontend
-#         requestData = request.get_json()
-
-#         # Initialize the requested vehicle name
-#         vehicleName = requestData['vehicle_name']
-
-#         # Comment out for testing for frontend
-#         ########################################################
-#         # if send is true
-#         # sampleGCS.getPacket.getName(vehicleName)
-#         # time.sleep(1)
-#         ########################################################
-#         # Query the database for the requested vehicle & save into dictionary
-#         requestedVehicle = vehicleDatabase.getData(vehicleName)
-
-#         # print(requestedVehicle)
-
-#         # Send JSON Object back to frontend
-#         return jsonify(requestedVehicle)
-
-# Compares new request's stage/time to updateStage.json
-# @app.route("/updateGeneralStage", methods = ['POST'])
-# def updateGeneralStage():
-#     if(request.method == "POST"):
-
-
-#         now = datetime.now()
-#         # Object from frontened
-#         requestData = request.get_json()
-
-#         #sampleGCS.getPacket.getName(postData.vehicleName)
-#         #print(now)
-#         #print(requestData)
-#         updateStage.updateTime(requestData, now)
-
-#     return 'Update Complete'
-
-# Sends information from updateStage.json
-# @app.route("/getGeneralStage", methods = ['GET'])
-# def getGeneralStage():
-
-#     # opens updateStage.json
-#     jsonFile = open("updateStage.json")
-#     dataValue = json.load(jsonFile)
-
-#     # Saves the information needed to display general stage
-#     dataFormat = {
-#         "id": dataValue['general_stage'],
-#         "vehicle": dataValue['vehicle'],
-#         "name": dataValue['stage_name'],
-#         "estop": dataValue['estop']
-#     }
-
-#     return dataFormat
-
-# Saves the new mission entry into newMission.json
-# @app.route("/createNewMission", methods = ['POST'])
-# def createNewMission():
-#     if(request.method == "POST"):
 
 #         # Object from frontend
 #         requestData = request.get_json()
@@ -616,25 +533,6 @@ if __name__ == '__main__':
 
     
 
-    def is_empty(result):
-        return True if len(result)==0 else False
-    def is_correct_coordinates_format(obj):
-        if not is_empty(obj):
-            # lat = -90 to 90
-            # lng = -180 to 180
-            if (isinstance(obj["lat"], float)) or (isinstance(obj["lat"], int)):
-                if not (-90 <= obj["lat"] <= 90):
-                    raise Exception("ERROR: Latitude not valid")
-            else:
-                raise Exception("ERROR: Latitude not a float")
-
-            if isinstance(obj["lng"], float) or isinstance(obj["lng"], int):
-                if not (-180 <= obj["lng"] <= 180):
-                    raise Exception("ERROR: Longitude not valid")
-            else:
-                raise Exception("ERROR: Longitude not a float")
-            return True
-        return False
     '''
     SUBMIT ALL: clear all data and add new submitted data
     DELETE ALL: clear all data and leave it be
@@ -759,4 +657,8 @@ if __name__ == '__main__':
 
 
     # the host value allows traffic from anywhere to run this
+    
+    external_ip = socket.gethostbyname(socket.gethostname())
+    
+    print(f"\nExternal IP address: {external_ip}\n")
     app.run(host="0.0.0.0")
